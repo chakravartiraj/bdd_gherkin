@@ -61,8 +61,9 @@ show_main_menu() {
     echo "  📊 2. Coverage Tools" 
     echo "  🔍 3. Analysis Tools"
     echo "  🥒 4. BDD/Gherkin Tools"
-    echo "  📖 5. Documentation"
-    echo "  ⚙️  6. Setup & Configuration"
+    echo "  🎯 5. Golden Testing Tools"
+    echo "  📖 6. Documentation"
+    echo "  ⚙️  7. Setup & Configuration"
     echo ""
     echo "  📋 0. Show all available scripts"
     echo "  ❌ q. Quit"
@@ -173,6 +174,41 @@ show_bdd_menu() {
     echo ""
 }
 
+# Show golden testing menu
+show_golden_menu() {
+    clear
+    print_header "Golden Testing Tools"
+    echo ""
+    echo "🎯 Golden/Visual Regression Testing tools:"
+    echo ""
+    echo "  1. 🧪 Run Golden Tests"
+    echo "     Execute all golden tests and compare with master images"
+    echo "     → ./scripts/golden-test.sh run"
+    echo ""
+    echo "  2. 📸 Update Golden Images"
+    echo "     Generate/update master golden images"
+    echo "     → ./scripts/golden-test.sh update"
+    echo ""
+    echo "  3. 🔍 Verify Golden Tests"
+    echo "     Run golden tests with detailed output"
+    echo "     → ./scripts/golden-test.sh verify"
+    echo ""
+    echo "  4. 🧹 Clean Golden Files"
+    echo "     Remove all generated golden files"
+    echo "     → ./scripts/golden-test.sh clean"
+    echo ""
+    echo "  5. 📊 Golden Test Status"
+    echo "     Check golden testing setup and files"
+    echo "     → ./scripts/golden-test.sh status"
+    echo ""
+    echo "  6. 📚 Golden Testing Documentation"
+    echo "     Open golden testing guide in browser"
+    echo ""
+    echo "  b. ← Back to main menu"
+    echo "  q. ❌ Quit"
+    echo ""
+}
+
 # Show documentation menu
 show_documentation_menu() {
     clear
@@ -183,11 +219,13 @@ show_documentation_menu() {
     echo "  HTML Documentation:"
     echo "    📄 docs/index.html - Main documentation hub"
     echo "    🧪 docs/flutter-test-walkthrough.html - Complete testing guide"
+    echo "    🎯 docs/flutter-golden-walkthrough.html - Golden testing guide"
     echo "    📊 docs/flutter-coverage-walkthrough.html - Coverage tutorial"
     echo "    🔍 docs/flutter-analyze-walkthrough.html - Analysis guide"
     echo ""
     echo "  Quick References:"
     echo "    📋 docs/test-quick-reference.html - Testing commands cheat sheet"
+    echo "    📋 docs/golden-quick-reference.html - Golden testing commands"
     echo "    📋 docs/coverage-quick-reference.html - Coverage commands"
     echo "    📋 docs/analyze-quick-reference.html - Analysis commands"
     echo ""
@@ -236,6 +274,15 @@ show_all_scripts() {
         echo "     Available commands: status, create-sample, generate, test, watch"
         echo ""
         
+        echo "🎯 GOLDEN TESTING:"
+        echo "   ./scripts/golden-test.sh           Golden/Visual regression testing"
+        echo "     Available commands: run, update, verify, clean, status"
+        echo ""
+        
+        echo "🎯 GOLDEN TESTING:"
+        echo "   ./scripts/golden-test.sh            Golden testing and visual regression toolkit"
+        echo ""
+        
         echo "🛠️  UTILITIES:"
         echo "   ./scripts/dev.sh                   This script (development hub)"
         echo ""
@@ -260,6 +307,20 @@ open_documentation() {
         fi
     else
         print_error "Documentation not found at docs/index.html"
+    fi
+}
+
+# Open golden testing documentation
+open_golden_documentation() {
+    if [ -f "docs/flutter-golden-walkthrough.html" ]; then
+        if command -v xdg-open &> /dev/null; then
+            xdg-open docs/flutter-golden-walkthrough.html
+            print_success "Opened golden testing documentation in browser"
+        else
+            print_info "Open this file in your browser: $(pwd)/docs/flutter-golden-walkthrough.html"
+        fi
+    else
+        print_error "Golden testing documentation not found at docs/flutter-golden-walkthrough.html"
     fi
 }
 
@@ -324,8 +385,9 @@ handle_selection() {
                 2) show_coverage_menu && handle_menu "coverage" ;;
                 3) show_analysis_menu && handle_menu "analysis" ;;
                 4) show_bdd_menu && handle_menu "bdd" ;;
-                5) show_documentation_menu && handle_menu "documentation" ;;
-                6) print_info "Setup & Configuration - Use individual tutorials to set up each tool" && sleep 2 ;;
+                5) show_golden_menu && handle_menu "golden" ;;
+                6) show_documentation_menu && handle_menu "documentation" ;;
+                7) print_info "Setup & Configuration - Use individual tutorials to set up each tool" && sleep 2 ;;
                 0) show_all_scripts ;;
                 q|Q) exit 0 ;;
                 *) print_warning "Invalid choice. Try again." && sleep 1 ;;
@@ -373,6 +435,19 @@ handle_selection() {
                 *) print_warning "Invalid choice. Try again." && sleep 1 ;;
             esac
             ;;
+        "golden")
+            case "$choice" in
+                1) execute_script "./scripts/golden-test.sh" "run" ;;
+                2) execute_script "./scripts/golden-test.sh" "update" ;;
+                3) execute_script "./scripts/golden-test.sh" "verify" ;;
+                4) execute_script "./scripts/golden-test.sh" "clean" ;;
+                5) execute_script "./scripts/golden-test.sh" "status" ;;
+                6) open_golden_documentation ;;
+                b|B) return ;;
+                q|Q) exit 0 ;;
+                *) print_warning "Invalid choice. Try again." && sleep 1 ;;
+            esac
+            ;;
         "documentation")
             case "$choice" in
                 1) open_documentation ;;
@@ -396,6 +471,7 @@ handle_menu() {
             "coverage") show_coverage_menu ;;
             "analysis") show_analysis_menu ;;
             "bdd") show_bdd_menu ;;
+            "golden") show_golden_menu ;;
             "documentation") show_documentation_menu ;;
         esac
         
@@ -426,6 +502,27 @@ execute_quick_command() {
             ;;
         "bdd")
             execute_script "./scripts/bdd-helper.sh" $args
+            ;;
+        "golden")
+            execute_script "./scripts/golden-test.sh" $args
+            ;;
+        "golden-run")
+            execute_script "./scripts/golden-test.sh" "run" $args
+            ;;
+        "golden-update")
+            execute_script "./scripts/golden-test.sh" "update" $args
+            ;;
+        "golden-verify")
+            execute_script "./scripts/golden-test.sh" "verify" $args
+            ;;
+        "golden-clean")
+            execute_script "./scripts/golden-test.sh" "clean" $args
+            ;;
+        "golden-status")
+            execute_script "./scripts/golden-test.sh" "status" $args
+            ;;
+        "golden-docs")
+            open_golden_documentation
             ;;
         "watch-test")
             execute_script "./scripts/test-watch.sh" $args
@@ -469,6 +566,13 @@ Quick Commands:
   $0 coverage [args]    Run coverage analysis  
   $0 analyze [args]     Run code analysis
   $0 bdd [args]         Run BDD helper
+  $0 golden [args]      Run golden testing
+  $0 golden-run         Run golden tests
+  $0 golden-update      Update golden images
+  $0 golden-verify      Verify golden tests
+  $0 golden-clean       Clean golden files
+  $0 golden-status      Check golden status
+  $0 golden-docs        Open golden docs
   $0 watch-test         Start test watch mode
   $0 watch-coverage     Start coverage watch mode
   $0 tutorial-test      Start testing tutorial
@@ -483,6 +587,9 @@ Examples:
   $0 coverage          # Quick coverage check
   $0 analyze           # Daily analysis
   $0 bdd status        # Check BDD setup
+  $0 golden run        # Run golden tests
+  $0 golden-update     # Update golden images
+  $0 golden-docs       # Open golden testing guide
   $0 docs              # Open documentation hub
 
 EOF
