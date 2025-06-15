@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏋️ Hands-On Flutter Testing Exercises - BDD Gherkin Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            overflow-x: auto;
+            min-width: 320px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            min-width: 300px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #02AAB0 0%, #00CDAC 100%);
+            border-radius: 15px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-100px) translateY(-100px); }
+            100% { transform: translateX(100px) translateY(100px); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .exercise-section {
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(145deg, #f8f9ff, #e8f4fd);
+            border-radius: 15px;
+            border-left: 5px solid #02AAB0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exercise-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #02AAB0, #00CDAC);
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+            opacity: 0.1;
+        }
+
+        .exercise-section h2 {
+            color: #02AAB0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            position: relative;
+        }
+
+        .exercise-section h3 {
+            color: #333;
+            margin: 25px 0 15px 0;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+
+        .command-box {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: pre;
+            word-wrap: normal;
+            box-sizing: border-box;
+            min-width: 0;
+        }
+
+        .command-box::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .command-box::-webkit-scrollbar-track {
+            background: #2d2d2d;
+            border-radius: 4px;
+        }
+
+        .command-box::-webkit-scrollbar-thumb {
+            background: #02AAB0;
+            border-radius: 4px;
+        }
+
+        .command-box::-webkit-scrollbar-thumb:hover {
+            background: #00CDAC;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #02AAB0;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #00CDAC;
+            transform: scale(1.05);
+        }
+
+        .copy-btn.copied {
+            background: #28a745;
+        }
+
+        .questions-box {
+            background: linear-gradient(135deg, #fff9c4, #fff59d);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #28a745;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 15px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checklist li.completed::before {
+            content: '✅';
+            color: #28a745;
+        }
+
+        .checklist li:hover::before {
+            transform: scale(1.2);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #02AAB0, #00CDAC);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .floating-nav {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .floating-nav h4 {
+            margin-bottom: 15px;
+            color: #02AAB0;
+        }
+
+        .floating-nav a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            transition: color 0.3s ease;
+        }
+
+        .floating-nav a:hover {
+            color: #02AAB0;
+        }
+
+        .medal {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+                border-radius: 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .exercise-section {
+                padding: 20px;
+                margin: 20px 0;
+            }
+
+            .floating-nav {
+                display: none;
+            }
+
+            .command-box {
+                padding: 15px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 5px;
+                padding: 10px;
+            }
+
+            .exercise-section {
+                padding: 15px;
+            }
+
+            .command-box {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-nav">
+        <h4>📍 Quick Navigation</h4>
+        <a href="#exercise1">🥇 Exercise 1: First Test Run</a>
+        <a href="#exercise2">🥈 Exercise 2: Write First Test</a>
+        <a href="#exercise3">🥉 Exercise 3: BDD Tests</a>
+        <a href="#exercise4">🏆 Exercise 4: TDD</a>
+        <a href="#exercise5">🧠 Exercise 5: Debug Tests</a>
+        <a href="#exercise6">🎭 Exercise 6: Advanced BDD</a>
+        <a href="#exercise7">📊 Exercise 7: Coverage</a>
+        <a href="#final-challenge">🎯 Final Challenge</a>
+        <a href="#completion">🏁 Completion</a>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🏋️ Hands-On Flutter Testing Exercises</h1>
+            <p>Practice What You Just Learned!</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div id="progressText">0% Complete</div>
+        </div>
+
+        <div class="warning-box">
+            <h3>🎯 Exercise Setup</h3>
+            <p>Before starting, make sure you're in the right place:</p>
+            <div class="command-box">
+cd /home/io/StudioProjects/bdd_gherkin
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+            <p>Check that you have the basic test files:</p>
+            <div class="command-box">
+ls test/
+# You should see: counter_test.dart, counter.feature, widget_test.dart
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="exercise-section" id="exercise1">
+            <h2><span class="medal">🥇</span>Exercise 1: Your First Test Run (Beginner)</h2>
+            <p><strong>Goal</strong>: Get comfortable running tests and reading results.</p>
+
+            <h3>Step 1: Run the Existing Tests</h3>
+            <div class="command-box">
+flutter test
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <div class="questions-box">
+                <h4>Questions to Answer:</h4>
+                <p>1. How many tests passed? ___</p>
+                <p>2. How long did the tests take? ___</p>
+                <p>3. Did you see any warnings or errors? ___</p>
+            </div>
+
+            <h3>Step 2: Run Individual Test Files</h3>
+            <div class="command-box">
+# Run only widget tests
+flutter test test/widget_test.dart
+
+# Run only BDD tests
+flutter test test/counter_test.dart
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <div class="questions-box">
+                <h4>Questions to Answer:</h4>
+                <p>1. Which test file has more tests? ___</p>
+                <p>2. Which runs faster? ___</p>
+                <p>3. What's the difference in output? ___</p>
+            </div>
+
+            <h3>Step 3: Break a Test (Learning from Failure)</h3>
+            <ol>
+                <li>Open <code>lib/main.dart</code></li>
+                <li>Change the app title from <code>'Flutter Demo Home Page'</code> to <code>'My Awesome App'</code></li>
+                <li>Save the file</li>
+                <li>Run tests again: <code>flutter test</code></li>
+            </ol>
+
+            <div class="questions-box">
+                <h4>What happened?</h4>
+                <p>- Which test failed? ___</p>
+                <p>- What was the error message? ___</p>
+                <p>- Why did it fail? ___</p>
+            </div>
+
+            <h3>Step 4: Fix the Test</h3>
+            <ol>
+                <li>Open <code>test/widget_test.dart</code></li>
+                <li>Find the line that looks for <code>'Flutter Demo Home Page'</code></li>
+                <li>Change it to <code>'My Awesome App'</code></li>
+                <li>Run tests again: <code>flutter test</code></li>
+            </ol>
+
+            <div class="success-box">
+                <h4>Success Check:</h4>
+                <ul class="checklist">
+                    <li onclick="toggleCheck(this)">All tests pass</li>
+                    <li onclick="toggleCheck(this)">You understand why the test failed</li>
+                    <li onclick="toggleCheck(this)">You know how to fix test failures</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="exercise-section" id="exercise2">
+            <h2><span class="medal">🥈</span>Exercise 2: Write Your First Test (Intermediate)</h2>
+            <p><strong>Goal</strong>: Create a test from scratch.</p>
+
+            <h3>Step 1: Understand What to Test</h3>
+            <p>Your app has a counter that:</p>
+            <ul>
+                <li>Starts at 0</li>
+                <li>Increases when you tap "+"</li>
+                <li>The title says "Flutter Demo Home Page" (or whatever you changed it to)</li>
+            </ul>
+
+            <h3>Step 2: Write a Test for the Minus Button</h3>
+            <p>The app has a minus button, but no test for it yet!</p>
+            <p>Add this test to <code>test/widget_test.dart</code>:</p>
+
+            <div class="command-box">
+testWidgets('Counter decrements when minus button is tapped', (WidgetTester tester) async {
+  // Build our app and trigger a frame
+  await tester.pumpWidget(const MyApp());
+
+  // First, increment to 1 (so we have something to decrement)
+  await tester.tap(find.byIcon(Icons.add));
+  await tester.pump();
+  
+  // Verify we're at 1
+  expect(find.text('1'), findsOneWidget);
+
+  // NOW TEST: Tap the minus button
+  await tester.tap(find.byIcon(Icons.remove));
+  await tester.pump();
+
+  // Verify that our counter has decremented back to 0
+  expect(find.text('0'), findsOneWidget);
+});
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <h3>Step 3: Run Your New Test</h3>
+            <div class="command-box">
+flutter test test/widget_test.dart
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <div class="questions-box">
+                <h4>Questions:</h4>
+                <p>1. Did your test pass? ___</p>
+                <p>2. If it failed, what was the error? ___</p>
+                <p>3. What does this test prove about your app? ___</p>
+            </div>
+
+            <h3>Step 4: Test Edge Cases</h3>
+            <p>What happens if you try to decrement below 0? Let's test it!</p>
+
+            <div class="command-box">
+testWidgets('Counter does not go below zero', (WidgetTester tester) async {
+  await tester.pumpWidget(const MyApp());
+
+  // Counter starts at 0, try to decrement
+  await tester.tap(find.byIcon(Icons.remove));
+  await tester.pump();
+
+  // Should still be 0 (or maybe -1? Let's find out!)
+  expect(find.text('0'), findsOneWidget);
+});
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <div class="questions-box">
+                <h4>Discovery Questions:</h4>
+                <p>1. What number does the counter show when you decrement from 0? ___</p>
+                <p>2. Is this the behavior you expected? ___</p>
+                <p>3. Should the app prevent going below 0? ___</p>
+            </div>
+        </div>
+
+        <div class="exercise-section" id="exercise3">
+            <h2><span class="medal">🥉</span>Exercise 3: Understanding BDD Tests (Advanced)</h2>
+            <p><strong>Goal</strong>: Connect plain English requirements to test code.</p>
+
+            <h3>Step 1: Read the Feature File</h3>
+            <p>Open <code>test/counter.feature</code> and read it out loud.</p>
+
+            <div class="questions-box">
+                <h4>Questions:</h4>
+                <p>1. How many scenarios are defined? ___</p>
+                <p>2. What user actions are tested? ___</p>
+                <p>3. What outcomes are verified? ___</p>
+            </div>
+
+            <h3>Step 2: Add a New Scenario</h3>
+            <p>Add this scenario to your <code>counter.feature</code> file:</p>
+
+            <div class="command-box">
+Scenario: Decrement counter
+  Given the app is running
+  When I tap {Icons.remove} icon
+  Then I see {-1} text
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <h3>Step 3: Generate the Test Code</h3>
+            <div class="command-box">
+dart run build_runner build
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <p><strong>Check:</strong> Look at <code>test/counter_test.dart</code> - did it add a new test?</p>
+
+            <h3>Step 4: Run the BDD Tests</h3>
+            <div class="command-box">
+flutter test test/counter_test.dart
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <div class="questions-box">
+                <h4>Questions:</h4>
+                <p>1. Did the new test pass or fail? ___</p>
+                <p>2. What does this tell you about how your app handles negative numbers? ___</p>
+                <p>3. Compare the BDD test to the widget test you wrote - which is easier to understand? ___</p>
+            </div>
+        </div>
+
+        <div class="exercise-section" id="exercise4">
+            <h2><span class="medal">🏆</span>Exercise 4: Test-Driven Development (Expert)</h2>
+            <p><strong>Goal</strong>: Write a test first, then make it pass.</p>
+
+            <h3>Step 1: Define a New Requirement</h3>
+            <p>Let's say you want to add a "Reset" button that sets the counter back to 0.</p>
+
+            <h3>Step 2: Write the Test First (Before Adding the Feature)</h3>
+            <p>Add this test to <code>test/widget_test.dart</code>:</p>
+
+            <div class="command-box">
+testWidgets('Reset button sets counter to zero', (WidgetTester tester) async {
+  await tester.pumpWidget(const MyApp());
+
+  // First, increment counter to 5
+  for (int i = 0; i < 5; i++) {
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump();
+  }
+  
+  // Verify we're at 5
+  expect(find.text('5'), findsOneWidget);
+
+  // Tap the reset button (doesn't exist yet!)
+  await tester.tap(find.byIcon(Icons.refresh));
+  await tester.pump();
+
+  // Should be back to 0
+  expect(find.text('0'), findsOneWidget);
+});
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <h3>Step 3: Run the Test (It Should Fail)</h3>
+            <div class="command-box">
+flutter test test/widget_test.dart
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <p><strong>Expected Result:</strong> Test fails because there's no reset button yet.</p>
+
+            <h3>Step 4: Add the Reset Button to Your App</h3>
+            <p>Edit <code>lib/main.dart</code> to add a reset button in the <code>floatingActionButton</code> area:</p>
+
+            <div class="command-box">
+// In the Scaffold, change floatingActionButton to:
+floatingActionButton: Row(
+  mainAxisAlignment: MainAxisAlignment.end,
+  children: [
+    FloatingActionButton(
+      onPressed: () {
+        setState(() {
+          _counter = 0;  // Reset to zero
+        });
+      },
+      tooltip: 'Reset',
+      child: const Icon(Icons.refresh),
+    ),
+    const SizedBox(width: 10),
+    FloatingActionButton(
+      onPressed: _incrementCounter,
+      tooltip: 'Increment',
+      child: const Icon(Icons.add),
+    ),
+  ],
+),
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <h3>Step 5: Run the Test Again</h3>
+            <div class="command-box">
+flutter test test/widget_test.dart
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <div class="questions-box">
+                <h4>Questions:</h4>
+                <p>1. Does your test pass now? ___</p>
+                <p>2. What did you have to add to make it pass? ___</p>
+                <p>3. How does it feel to write the test before the feature? ___</p>
+            </div>
+        </div>
+
+        <div class="exercise-section" id="exercise5">
+            <h2><span class="medal">🧠</span>Exercise 5: Debugging Failed Tests (Problem Solving)</h2>
+            <p><strong>Goal</strong>: Learn to diagnose and fix test problems.</p>
+
+            <h3>Step 1: Intentionally Break Something</h3>
+            <ol>
+                <li>In <code>lib/main.dart</code>, change <code>_counter++</code> to <code>_counter += 2</code></li>
+                <li>Run tests: <code>flutter test</code></li>
+            </ol>
+
+            <div class="questions-box">
+                <h4>Questions:</h4>
+                <p>1. Which tests fail? ___</p>
+                <p>2. What are the error messages? ___</p>
+                <p>3. Why do they fail? ___</p>
+            </div>
+
+            <h3>Step 2: Use Print Debugging in Tests</h3>
+            <p>Add this test that helps you see what's happening:</p>
+
+            <div class="command-box">
+testWidgets('Debug test - see what values we get', (WidgetTester tester) async {
+  await tester.pumpWidget(const MyApp());
+  
+  print('Starting counter value');
+  
+  await tester.tap(find.byIcon(Icons.add));
+  await tester.pump();
+  
+  // Find all text widgets and print their values
+  final textWidgets = find.byType(Text);
+  final textCount = textWidgets.evaluate().length;
+  print('Found $textCount text widgets');
+  
+  // This test doesn't check anything, just helps us debug
+});
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <p>Run this test and look at the output.</p>
+
+            <h3>Step 3: Fix the Problem</h3>
+            <ol>
+                <li>Change <code>_counter += 2</code> back to <code>_counter++</code></li>
+                <li>Run tests again to confirm they pass</li>
+            </ol>
+        </div>
+
+        <div class="exercise-section" id="exercise6">
+            <h2><span class="medal">🎭</span>Exercise 6: Advanced BDD Scenarios (Creative)</h2>
+            <p><strong>Goal</strong>: Write complex user scenarios in plain English.</p>
+
+            <h3>Step 1: Write a Complex Scenario</h3>
+            <p>Add this to your <code>counter.feature</code> file:</p>
+
+            <div class="command-box">
+Scenario: User increments then decrements
+  Given the app is running
+  When I tap {Icons.add} icon
+  And I tap {Icons.add} icon
+  And I tap {Icons.remove} icon
+  Then I see {1} text
+
+Scenario: Multiple operations result in correct value
+  Given the app is running
+  When I tap {Icons.add} icon
+  And I tap {Icons.add} icon
+  And I tap {Icons.add} icon
+  And I tap {Icons.remove} icon
+  Then I see {2} text
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <h3>Step 2: Generate and Run Tests</h3>
+            <div class="command-box">
+dart run build_runner build
+flutter test test/counter_test.dart
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <h3>Step 3: Create Your Own Scenario</h3>
+            <p>Think of a real user workflow and write it in Gherkin:</p>
+
+            <div class="command-box">
+Scenario: [Your scenario name here]
+  Given [starting condition]
+  When [user action]
+  And [another action]
+  Then [expected result]
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <div class="warning-box">
+                <p><strong>Challenge:</strong> Write a scenario that tests the reset button using Gherkin syntax!</p>
+            </div>
+        </div>
+
+        <div class="exercise-section" id="exercise7">
+            <h2><span class="medal">📊</span>Exercise 7: Test Coverage (Quality Check)</h2>
+            <p><strong>Goal</strong>: Understand how much of your code is tested.</p>
+
+            <h3>Step 1: Run Tests with Coverage</h3>
+            <div class="command-box">
+flutter test --coverage
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <h3>Step 2: View Coverage Report</h3>
+            <div class="command-box">
+# Generate HTML report
+genhtml coverage/lcov.info -o coverage/html
+
+# Open in browser (Linux)
+xdg-open coverage/html/index.html
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+
+            <h3>Step 3: Analyze Your Coverage</h3>
+            <p>Look at the coverage report and answer:</p>
+
+            <div class="questions-box">
+                <p>1. What percentage of your code is covered? ___%</p>
+                <p>2. Which files have the lowest coverage? ___</p>
+                <p>3. Which lines in <code>main.dart</code> are not tested? ___</p>
+            </div>
+
+            <h3>Step 4: Improve Coverage</h3>
+            <p>Write a test for an untested line. For example, if the app title isn't tested:</p>
+
+            <div class="command-box">
+testWidgets('App has correct title in app bar', (WidgetTester tester) async {
+  await tester.pumpWidget(const MyApp());
+  
+  expect(find.text('Flutter Demo Home Page'), findsOneWidget);
+});
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="exercise-section" id="final-challenge">
+            <h2><span class="medal">🎯</span>Final Challenge: Build a Feature with Tests</h2>
+            <p><strong>Goal</strong>: Apply everything you've learned to build something new.</p>
+
+            <h3>The Challenge</h3>
+            <p>Add a "Double" button that multiplies the counter by 2.</p>
+
+            <h3>Requirements</h3>
+            <ol>
+                <li>Write the BDD scenario first (in plain English)</li>
+                <li>Write the widget test first (before implementing)</li>
+                <li>Implement the feature</li>
+                <li>Make sure all tests pass</li>
+                <li>Check that coverage doesn't decrease</li>
+            </ol>
+
+            <div class="success-box">
+                <h4>Success Criteria</h4>
+                <ul class="checklist">
+                    <li onclick="toggleCheck(this)">Feature works in the app</li>
+                    <li onclick="toggleCheck(this)">Widget test passes</li>
+                    <li onclick="toggleCheck(this)">BDD test passes</li>
+                    <li onclick="toggleCheck(this)">All existing tests still pass</li>
+                    <li onclick="toggleCheck(this)">Code coverage maintains or improves</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="exercise-section" id="completion">
+            <h2><span class="medal">🏁</span>Completion Checklist</h2>
+            <p>Mark off each exercise as you complete it:</p>
+
+            <h3>Beginner Level:</h3>
+            <ul class="checklist">
+                <li onclick="toggleCheck(this)">Exercise 1: Successfully ran tests and fixed a failure</li>
+                <li onclick="toggleCheck(this)">Exercise 2: Wrote and ran your first test</li>
+            </ul>
+
+            <h3>Intermediate Level:</h3>
+            <ul class="checklist">
+                <li onclick="toggleCheck(this)">Exercise 3: Created and ran BDD scenarios</li>
+                <li onclick="toggleCheck(this)">Exercise 4: Practiced test-driven development</li>
+            </ul>
+
+            <h3>Advanced Level:</h3>
+            <ul class="checklist">
+                <li onclick="toggleCheck(this)">Exercise 5: Debugged failed tests</li>
+                <li onclick="toggleCheck(this)">Exercise 6: Wrote complex BDD scenarios</li>
+                <li onclick="toggleCheck(this)">Exercise 7: Analyzed test coverage</li>
+            </ul>
+
+            <h3>Expert Level:</h3>
+            <ul class="checklist">
+                <li onclick="toggleCheck(this)">Final Challenge: Built a complete feature with tests</li>
+            </ul>
+        </div>
+
+        <div class="success-box">
+            <h2>🎉 Congratulations!</h2>
+            <p>You've completed the hands-on Flutter testing exercises! You now have practical experience with:</p>
+            <ul>
+                <li>✅ Running and interpreting test results</li>
+                <li>✅ Writing widget tests from scratch</li>
+                <li>✅ Understanding BDD/Gherkin syntax</li>
+                <li>✅ Test-driven development workflow</li>
+                <li>✅ Debugging test failures</li>
+                <li>✅ Measuring and improving test coverage</li>
+            </ul>
+        </div>
+
+        <div class="warning-box">
+            <h3>📚 What's Next?</h3>
+            <ol>
+                <li><strong>Practice daily</strong>: Write one test every day for your current project</li>
+                <li><strong>Learn advanced topics</strong>: Mocking, integration tests, golden tests</li>
+                <li><strong>Join the community</strong>: Share your testing experiences</li>
+                <li><strong>Teach others</strong>: The best way to solidify your knowledge</li>
+            </ol>
+            <p><em>Remember: Good tests are not about having 100% coverage, but about having confidence that your app works as intended! 🚀</em></p>
+        </div>
+    </div>
+
+    <script>
+        // Copy to clipboard functionality
+        function copyToClipboard(button) {
+            const codeBlock = button.parentElement;
+            const text = codeBlock.textContent.replace('Copy', '').trim();
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Checklist functionality
+        function toggleCheck(item) {
+            item.classList.toggle('completed');
+            updateProgress();
+            saveProgress();
+        }
+
+        // Progress tracking
+        function updateProgress() {
+            const totalItems = document.querySelectorAll('.checklist li').length;
+            const completedItems = document.querySelectorAll('.checklist li.completed').length;
+            const percentage = Math.round((completedItems / totalItems) * 100);
+            
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = percentage + '% Complete';
+        }
+
+        // Save progress to localStorage
+        function saveProgress() {
+            const completedItems = [];
+            document.querySelectorAll('.checklist li.completed').forEach((item, index) => {
+                completedItems.push(index);
+            });
+            localStorage.setItem('testExerciseProgress', JSON.stringify(completedItems));
+        }
+
+        // Load progress from localStorage
+        function loadProgress() {
+            const saved = localStorage.getItem('testExerciseProgress');
+            if (saved) {
+                const completedItems = JSON.parse(saved);
+                const allItems = document.querySelectorAll('.checklist li');
+                completedItems.forEach(index => {
+                    if (allItems[index]) {
+                        allItems[index].classList.add('completed');
+                    }
+                });
+            }
+            updateProgress();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProgress();
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.floating-nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

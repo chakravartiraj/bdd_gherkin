@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏋️ Hands-On Coverage Exercise</title>
+    <style>
+        :root {
+            --flutter-blue: #0175C2;
+            --flutter-navy: #02539A;
+            --flutter-sky: #13B9FD;
+            --flutter-yellow: #FFC108;
+            --bg-primary: #0A0E27;
+            --bg-secondary: #1A1F3A;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0BEC5;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --info: #2196F3;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, var(--flutter-blue), var(--flutter-sky));
+            --gradient-secondary: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius);
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '🏋️';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 6rem;
+            opacity: 0.2;
+            animation: workout 2s ease-in-out infinite;
+        }
+
+        @keyframes workout {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(5deg) scale(1.1); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-header {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+            width: 0%;
+        }
+
+        .nav-floating {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 250px;
+        }
+
+        .nav-floating h3 {
+            color: var(--flutter-sky);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .nav-floating a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.3rem 0;
+            font-size: 0.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-floating a:hover,
+        .nav-floating a.active {
+            color: var(--flutter-sky);
+        }
+
+        .exercise {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(255,255,255,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .exercise.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .exercise h2 {
+            color: var(--flutter-sky);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .exercise-number {
+            background: var(--flutter-blue);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .step {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--flutter-yellow);
+        }
+
+        .step h3 {
+            color: var(--flutter-yellow);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .command-box {
+            background: var(--bg-primary);
+            border: 1px solid var(--flutter-blue);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: pre;
+            word-wrap: normal;
+            word-break: normal;
+            max-width: 100%;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--flutter-blue) transparent;
+        }
+
+        .command-box::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .command-box::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        .command-box::-webkit-scrollbar-thumb {
+            background: var(--flutter-blue);
+            border-radius: 4px;
+        }
+
+        .command-box::-webkit-scrollbar-thumb:hover {
+            background: var(--flutter-sky);
+        }
+
+        .command-box pre {
+            margin: 0;
+            color: var(--flutter-sky);
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: pre;
+            word-wrap: normal;
+            word-break: normal;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--flutter-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+            background: var(--flutter-navy);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
+
+        .input-field {
+            background: var(--bg-primary);
+            border: 1px solid var(--flutter-blue);
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            color: var(--text-primary);
+            width: 100px;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--flutter-sky);
+            box-shadow: 0 0 0 2px rgba(19, 185, 253, 0.2);
+        }
+
+        .textarea-field {
+            background: var(--bg-primary);
+            border: 1px solid var(--flutter-blue);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            color: var(--text-primary);
+            width: 100%;
+            min-height: 80px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .textarea-field:focus {
+            outline: none;
+            border-color: var(--flutter-sky);
+            box-shadow: 0 0 0 2px rgba(19, 185, 253, 0.2);
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .checklist li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .checklist li:hover {
+            color: var(--flutter-sky);
+        }
+
+        .checklist input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 0.5rem;
+            accent-color: var(--flutter-blue);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-success { background: rgba(76, 175, 80, 0.1); border-color: var(--success); }
+        .alert-warning { background: rgba(255, 152, 0, 0.1); border-color: var(--warning); }
+        .alert-error { background: rgba(244, 67, 54, 0.1); border-color: var(--error); }
+        .alert-info { background: rgba(33, 150, 243, 0.1); border-color: var(--info); }
+
+        .challenge-mode {
+            background: linear-gradient(135deg, var(--error), #8E24AA);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid var(--flutter-yellow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-mode::before {
+            content: '🎯';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 3rem;
+            opacity: 0.3;
+        }
+
+        .challenge-mode h2 {
+            color: var(--flutter-yellow);
+            margin-bottom: 1rem;
+        }
+
+        .reflection-section {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid var(--flutter-sky);
+        }
+
+        .reflection-question {
+            margin: 1.5rem 0;
+        }
+
+        .reflection-question label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--flutter-sky);
+            font-weight: 600;
+        }
+
+        .completion-section {
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .completion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .completion-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .completion-card h4 {
+            color: var(--flutter-yellow);
+            margin-bottom: 1rem;
+        }
+
+        .save-status {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: var(--success);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .save-status.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem 0.5rem;
+                margin: 0;
+            }
+
+            .command-box {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+                margin: 0.8rem 0;
+            }
+
+            .nav-floating {
+                width: calc(100% - 1rem);
+                left: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.5rem 0.25rem;
+            }
+
+            .command-box {
+                font-size: 0.8rem;
+                padding: 0.6rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-floating">
+        <h3>📋 Exercise Navigation</h3>
+        <a href="#progress">📊 Progress</a>
+        <a href="#exercise1">🏃 Exercise 1</a>
+        <a href="#exercise2">🧐 Exercise 2</a>
+        <a href="#exercise3">📈 Exercise 3</a>
+        <a href="#exercise4">🔍 Exercise 4</a>
+        <a href="#exercise5">🔄 Exercise 5</a>
+        <a href="#exercise6">🚀 Exercise 6</a>
+        <a href="#challenge">🎯 Challenge</a>
+        <a href="#reflection">📝 Reflection</a>
+        <a href="#completion">🏆 Completion</a>
+    </div>
+
+    <div class="save-status" id="saveStatus">Progress saved! 💾</div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>🏋️ Hands-On Coverage Exercise</h1>
+            <p>This exercise uses your BDD Gherkin project. Follow along step by step!</p>
+        </div>
+
+        <div id="progress" class="progress-header">
+            <h3>📊 Exercise Progress</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p>Complete each exercise to track your progress</p>
+        </div>
+
+        <div class="alert alert-info">
+            <span>ℹ️</span>
+            <div>
+                <strong>Before You Start:</strong> This exercise uses your BDD Gherkin project. Make sure you're in the correct directory and have the necessary tools installed.
+            </div>
+        </div>
+
+        <section id="exercise1" class="exercise">
+            <h2><span class="exercise-number">1</span>Your First Coverage Run</h2>
+
+            <div class="step">
+                <h3>Step 1: Check Your Starting Point</h3>
+                <div class="command-box">
+                    <pre># Open terminal in your project folder
+cd /home/io/StudioProjects/bdd_gherkin
+
+# Run your first coverage analysis
+./scripts/quick-coverage.sh</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, 'cd /home/io/StudioProjects/bdd_gherkin\n./scripts/quick-coverage.sh')">Copy</button>
+                </div>
+
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                    <strong>📝 Write down your results:</strong><br>
+                    <label>Current coverage percentage: </label>
+                    <input type="text" class="input-field" id="startingCoverage" placeholder="___%">
+                    <br><br>
+                    <label>Number of lines tested: </label>
+                    <input type="text" class="input-field" id="linesTested" placeholder="____">
+                    <br><br>
+                    <label>Number of total lines: </label>
+                    <input type="text" class="input-field" id="totalLines" placeholder="____">
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 2: Open the Visual Report</h3>
+                <div class="command-box">
+                    <pre># Open the HTML report
+xdg-open coverage/html/index.html</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, 'xdg-open coverage/html/index.html')">Copy</button>
+                </div>
+
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                    <strong>🔍 Exploration tasks:</strong><br>
+                    1. Click on <code>lib/main.dart</code> in the report<br>
+                    2. Look for red lines (untested code)<br>
+                    3. Count how many red lines you see: <input type="text" class="input-field" id="redLinesCount" placeholder="____">
+                </div>
+
+                <div class="checklist">
+                    <li><input type="checkbox" id="ex1-step1"> <label for="ex1-step1">Completed coverage analysis</label></li>
+                    <li><input type="checkbox" id="ex1-step2"> <label for="ex1-step2">Opened visual report</label></li>
+                    <li><input type="checkbox" id="ex1-step3"> <label for="ex1-step3">Identified red lines in main.dart</label></li>
+                </div>
+            </div>
+        </section>
+
+        <section id="exercise2" class="exercise">
+            <h2><span class="exercise-number">2</span>Understanding Your Code</h2>
+
+            <div class="step">
+                <h3>Step 3: Analyze main.dart</h3>
+                <p>Open <code>lib/main.dart</code> in your editor and the coverage report side by side.</p>
+
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                    <strong>🤔 Questions to answer:</strong><br><br>
+                    <label>1. Which function has red lines?</label><br>
+                    <input type="text" class="input-field" id="functionWithRed" style="width: 200px;" placeholder="Function name">
+                    <br><br>
+                    <label>2. What do you think these lines do?</label><br>
+                    <textarea class="textarea-field" id="whatLinesDoEx2" placeholder="Describe what the red lines do..."></textarea>
+                    <br><br>
+                    <label>3. Why might they not be tested?</label><br>
+                    <textarea class="textarea-field" id="whyNotTested" placeholder="Your thoughts on why these lines aren't tested..."></textarea>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 4: Look at Your Tests</h3>
+                <div class="command-box">
+                    <pre># See what tests you have
+ls test/</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, 'ls test/')">Copy</button>
+                </div>
+
+                <div class="alert alert-info">
+                    <span>📁</span>
+                    <div>
+                        <strong>You should see:</strong>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li><code>counter_test.dart</code> - BDD/Gherkin tests</li>
+                            <li><code>widget_test.dart</code> - Regular Flutter tests</li>
+                            <li><code>counter.feature</code> - Gherkin feature file</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="checklist">
+                    <li><input type="checkbox" id="ex2-step1"> <label for="ex2-step1">Analyzed main.dart coverage</label></li>
+                    <li><input type="checkbox" id="ex2-step2"> <label for="ex2-step2">Identified test files</label></li>
+                    <li><input type="checkbox" id="ex2-step3"> <label for="ex2-step3">Answered reflection questions</label></li>
+                </div>
+            </div>
+        </section>
+
+        <section id="exercise3" class="exercise">
+            <h2><span class="exercise-number">3</span>Improve Your Coverage</h2>
+
+            <div class="step">
+                <h3>Step 5: Run Tests Individually</h3>
+                <div class="command-box">
+                    <pre># Run just the widget tests
+flutter test test/widget_test.dart --coverage
+
+# Check what this covers
+./scripts/quick-coverage.sh</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, 'flutter test test/widget_test.dart --coverage\n./scripts/quick-coverage.sh')">Copy</button>
+                </div>
+
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                    <strong>📊 Compare results:</strong><br>
+                    <label>Coverage with all tests: </label>
+                    <input type="text" class="input-field" id="allTestsCoverage" placeholder="___%">
+                    <br><br>
+                    <label>Coverage with just widget tests: </label>
+                    <input type="text" class="input-field" id="widgetTestsCoverage" placeholder="___%">
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 6: Identify Missing Tests</h3>
+                <p>Looking at your coverage report, the untested lines are probably:</p>
+                <ul style="margin: 1rem 0; padding-left: 2rem;">
+                    <li>Error handling code</li>
+                    <li>Edge cases</li>
+                    <li>Less common user flows</li>
+                </ul>
+                <div class="alert alert-warning">
+                    <span>🎯</span>
+                    <div><strong>Your mission:</strong> Write a test for one untested line</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 7: Write a New Test</h3>
+                <p>Add this test to <code>test/widget_test.dart</code>:</p>
+                <div class="command-box">
+                    <pre>testWidgets('App shows correct title', (WidgetTester tester) async {
+  // Build our app and trigger a frame.
+  await tester.pumpWidget(const MyApp());
+
+  // Verify the app title appears
+  expect(find.text('Flutter Demo Home Page'), findsOneWidget);
+});</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, `testWidgets('App shows correct title', (WidgetTester tester) async {\n  // Build our app and trigger a frame.\n  await tester.pumpWidget(const MyApp());\n\n  // Verify the app title appears\n  expect(find.text('Flutter Demo Home Page'), findsOneWidget);\n});`)">Copy</button>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 8: Check Your Improvement</h3>
+                <div class="command-box">
+                    <pre># Run coverage again
+./scripts/quick-coverage.sh</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, './scripts/quick-coverage.sh')">Copy</button>
+                </div>
+
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                    <strong>📈 Results:</strong><br>
+                    <label>New coverage percentage: </label>
+                    <input type="text" class="input-field" id="newCoverage" placeholder="___%">
+                    <br><br>
+                    <label>Did it improve? </label>
+                    <select class="input-field" id="didImprove">
+                        <option value="">Select...</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <br><br>
+                    <label>How many lines improved: </label>
+                    <input type="text" class="input-field" id="linesImproved" placeholder="____">
+                </div>
+
+                <div class="checklist">
+                    <li><input type="checkbox" id="ex3-step1"> <label for="ex3-step1">Ran individual tests</label></li>
+                    <li><input type="checkbox" id="ex3-step2"> <label for="ex3-step2">Added new test</label></li>
+                    <li><input type="checkbox" id="ex3-step3"> <label for="ex3-step3">Verified improvement</label></li>
+                </div>
+            </div>
+        </section>
+
+        <section id="exercise4" class="exercise">
+            <h2><span class="exercise-number">4</span>Reading Reports Like a Pro</h2>
+
+            <div class="step">
+                <h3>Step 9: Detailed Analysis</h3>
+                <p>Open the HTML report again and click on <code>lib/main.dart</code>.</p>
+
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                    <strong>🔍 Detective work:</strong><br><br>
+                    <label>1. Find the line with <code>theme: ThemeData(</code> - is it green or red?</label><br>
+                    <select class="input-field" id="themeColor">
+                        <option value="">Select...</option>
+                        <option value="green">Green</option>
+                        <option value="red">Red</option>
+                    </select>
+                    <br><br>
+                    <label>2. Find the line with <code>primarySwatch: Colors.blue</code> - is it green or red?</label><br>
+                    <select class="input-field" id="primaryColor">
+                        <option value="">Select...</option>
+                        <option value="green">Green</option>
+                        <option value="red">Red</option>
+                    </select>
+                    <br><br>
+                    <label>3. What about the <code>floatingActionButton</code> section?</label><br>
+                    <select class="input-field" id="fabColor">
+                        <option value="">Select...</option>
+                        <option value="green">Green</option>
+                        <option value="red">Red</option>
+                        <option value="mixed">Mixed</option>
+                    </select>
+                </div>
+
+                <div style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                    <strong>💡 Pattern recognition:</strong><br>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                        <li>Lines that are executed during app startup: Usually <strong>Green</strong></li>
+                        <li>Lines that require user interaction: Usually <strong>Red</strong></li>
+                        <li>Lines that handle special cases: Usually <strong>Red</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 10: Coverage Quality Assessment</h3>
+                <p>Based on your current coverage:</p>
+
+                <div class="alert alert-success">
+                    <span>🟢</span>
+                    <div>
+                        <strong>If 90%+ coverage: Excellent!</strong> You have great test coverage. Focus on:
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li>Maintaining this level</li>
+                            <li>Testing edge cases</li>
+                            <li>Adding integration tests</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <span>🟡</span>
+                    <div>
+                        <strong>If 80-90% coverage: Good!</strong> You're on the right track. Consider:
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li>Adding tests for error scenarios</li>
+                            <li>Testing user interactions more thoroughly</li>
+                            <li>Adding widget tests for UI components</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="alert alert-error">
+                    <span>🔴</span>
+                    <div>
+                        <strong>If below 80% coverage: Needs improvement.</strong> Priority actions:
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li>Test your main app functions</li>
+                            <li>Add basic widget tests</li>
+                            <li>Test happy path scenarios first</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="checklist">
+                    <li><input type="checkbox" id="ex4-step1"> <label for="ex4-step1">Completed detailed analysis</label></li>
+                    <li><input type="checkbox" id="ex4-step2"> <label for="ex4-step2">Understood coverage patterns</label></li>
+                    <li><input type="checkbox" id="ex4-step3"> <label for="ex4-step3">Assessed coverage quality</label></li>
+                </div>
+            </div>
+        </section>
+
+        <section id="exercise5" class="exercise">
+            <h2><span class="exercise-number">5</span>Daily Workflow Practice</h2>
+
+            <div class="step">
+                <h3>Step 11: Make a Small Change</h3>
+                <ol style="margin: 1rem 0; padding-left: 2rem;">
+                    <li>Open <code>lib/main.dart</code></li>
+                    <li>Change the app title from 'Flutter Demo Home Page' to 'My Awesome App'</li>
+                    <li>Save the file</li>
+                </ol>
+            </div>
+
+            <div class="step">
+                <h3>Step 12: Check Impact on Tests</h3>
+                <div class="command-box">
+                    <pre># Run tests to see what breaks
+flutter test</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, 'flutter test')">Copy</button>
+                </div>
+
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                    <strong>🚨 What happened?</strong><br>
+                    <label>Did any tests fail? </label>
+                    <select class="input-field" id="testsFailed">
+                        <option value="">Select...</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <br><br>
+                    <label>Which test failed?</label><br>
+                    <input type="text" class="input-field" id="whichTestFailed" style="width: 250px;" placeholder="Test name">
+                    <br><br>
+                    <label>Why did it fail?</label><br>
+                    <textarea class="textarea-field" id="whyTestFailed" placeholder="Explain why the test failed..."></textarea>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 13: Fix the Test</h3>
+                <ol style="margin: 1rem 0; padding-left: 2rem;">
+                    <li>Open <code>test/widget_test.dart</code></li>
+                    <li>Find the line that looks for 'Flutter Demo Home Page'</li>
+                    <li>Change it to 'My Awesome App'</li>
+                    <li>Save the file</li>
+                </ol>
+            </div>
+
+            <div class="step">
+                <h3>Step 14: Verify Fix</h3>
+                <div class="command-box">
+                    <pre># Run tests again
+flutter test --coverage</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, 'flutter test --coverage')">Copy</button>
+                </div>
+
+                <div class="checklist">
+                    <strong>✅ Success checklist:</strong>
+                    <li><input type="checkbox" id="ex5-success1"> <label for="ex5-success1">All tests pass</label></li>
+                    <li><input type="checkbox" id="ex5-success2"> <label for="ex5-success2">Coverage percentage maintained or improved</label></li>
+                    <li><input type="checkbox" id="ex5-success3"> <label for="ex5-success3">No new red lines in coverage report</label></li>
+                </div>
+            </div>
+        </section>
+
+        <section id="exercise6" class="exercise">
+            <h2><span class="exercise-number">6</span>Advanced Coverage Exploration</h2>
+
+            <div class="step">
+                <h3>Step 15: Explore BDD Coverage</h3>
+                <div class="command-box">
+                    <pre># Run only BDD tests
+flutter test test/counter_test.dart --coverage</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, 'flutter test test/counter_test.dart --coverage')">Copy</button>
+                </div>
+
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                    <strong>🤓 BDD vs Unit Test Coverage:</strong><br>
+                    <label>BDD test coverage: </label>
+                    <input type="text" class="input-field" id="bddCoverage" placeholder="___%">
+                    <br><br>
+                    <label>Regular test coverage: </label>
+                    <input type="text" class="input-field" id="regularCoverage" placeholder="___%">
+                    <br><br>
+                    <label>Which covers more code?</label><br>
+                    <select class="input-field" id="whichCoversMore">
+                        <option value="">Select...</option>
+                        <option value="bdd">BDD Tests</option>
+                        <option value="regular">Regular Tests</option>
+                        <option value="same">About the Same</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 16: Create a Coverage Goal</h3>
+                <p>Based on your analysis, set a realistic goal:</p>
+
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                    <label><strong>My coverage goal:</strong></label><br>
+                    <input type="text" class="input-field" id="coverageGoal" placeholder="___%"> by 
+                    <input type="date" class="input-field" id="goalDate" style="width: 150px;">
+                    <br><br>
+                    <label><strong>To achieve this, I need to:</strong></label><br>
+                    <textarea class="textarea-field" id="achievementPlan" placeholder="1. ___________________________&#10;2. ___________________________&#10;3. ___________________________"></textarea>
+                </div>
+
+                <div class="checklist">
+                    <li><input type="checkbox" id="ex6-step1"> <label for="ex6-step1">Compared BDD vs regular test coverage</label></li>
+                    <li><input type="checkbox" id="ex6-step2"> <label for="ex6-step2">Set a coverage goal</label></li>
+                    <li><input type="checkbox" id="ex6-step3"> <label for="ex6-step3">Created achievement plan</label></li>
+                </div>
+            </div>
+        </section>
+
+        <section id="challenge" class="challenge-mode">
+            <h2>🎯 Challenge Mode</h2>
+
+            <div class="step">
+                <h3>Challenge 1: Find the Uncovered Code</h3>
+                <p>Without looking at the coverage report:</p>
+                <ol style="margin: 1rem 0; padding-left: 2rem;">
+                    <li>Guess which parts of your app aren't tested</li>
+                    <li>Write down your guesses</li>
+                    <li>Check the coverage report</li>
+                    <li>How accurate were you?</li>
+                </ol>
+                <textarea class="textarea-field" id="coverageGuesses" placeholder="Write your guesses about untested code here..."></textarea>
+            </div>
+
+            <div class="step">
+                <h3>Challenge 2: Write a Failing Test</h3>
+                <ol style="margin: 1rem 0; padding-left: 2rem;">
+                    <li>Write a test that you think should pass but doesn't</li>
+                    <li>Run it and see what happens</li>
+                    <li>Fix either the test or the code</li>
+                    <li>Re-run coverage</li>
+                </ol>
+                <textarea class="textarea-field" id="failingTestExp" placeholder="Describe your failing test experience..."></textarea>
+            </div>
+
+            <div class="step">
+                <h3>Challenge 3: Coverage Detective</h3>
+                <p>Look at the coverage report and find:</p>
+                <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                    <label>1. The file with the highest coverage:</label><br>
+                    <input type="text" class="input-field" id="highestCoverageFile" style="width: 200px;" placeholder="Filename">
+                    <br><br>
+                    <label>2. The file with the lowest coverage:</label><br>
+                    <input type="text" class="input-field" id="lowestCoverageFile" style="width: 200px;" placeholder="Filename">
+                    <br><br>
+                    <label>3. One line that's tested but probably shouldn't need to be:</label><br>
+                    <textarea class="textarea-field" id="unnecessaryTest" placeholder="Describe the line and why it might not need testing..."></textarea>
+                    <br><br>
+                    <label>4. One line that's not tested but probably should be:</label><br>
+                    <textarea class="textarea-field" id="missingTest" placeholder="Describe the line and why it should be tested..."></textarea>
+                </div>
+
+                <div class="checklist">
+                    <li><input type="checkbox" id="challenge1"> <label for="challenge1">Completed coverage guessing challenge</label></li>
+                    <li><input type="checkbox" id="challenge2"> <label for="challenge2">Wrote and fixed a failing test</label></li>
+                    <li><input type="checkbox" id="challenge3"> <label for="challenge3">Completed coverage detective work</label></li>
+                </div>
+            </div>
+        </section>
+
+        <section id="reflection" class="reflection-section">
+            <h2>📝 Reflection Questions</h2>
+            <p>After completing the exercises:</p>
+
+            <div class="reflection-question">
+                <label>1. What surprised you most about your coverage results?</label>
+                <textarea class="textarea-field" id="reflection1" placeholder="Share your biggest surprise..."></textarea>
+            </div>
+
+            <div class="reflection-question">
+                <label>2. Which parts of your app do you now realize need more testing?</label>
+                <textarea class="textarea-field" id="reflection2" placeholder="List the areas that need more tests..."></textarea>
+            </div>
+
+            <div class="reflection-question">
+                <label>3. What's one testing habit you want to start?</label>
+                <textarea class="textarea-field" id="reflection3" placeholder="Describe a new testing habit..."></textarea>
+            </div>
+
+            <div class="reflection-question">
+                <label>4. On a scale of 1-10, how confident are you now in your app's quality?</label>
+                <div>
+                    Before: <input type="number" class="input-field" id="confidenceBefore" min="1" max="10" style="width: 60px;" placeholder="__">
+                    After: <input type="number" class="input-field" id="confidenceAfter" min="1" max="10" style="width: 60px;" placeholder="__">
+                </div>
+            </div>
+
+            <div class="reflection-question">
+                <label>5. What's the next area you want to add tests for?</label>
+                <textarea class="textarea-field" id="reflection5" placeholder="Describe your next testing priority..."></textarea>
+            </div>
+        </section>
+
+        <section id="completion" class="completion-section">
+            <h2>🏆 Completion Checklist</h2>
+            <p>Mark off each item as you complete it:</p>
+
+            <div class="completion-grid">
+                <div class="completion-card">
+                    <h4>Understanding</h4>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="understanding1"> <label for="understanding1">I understand what coverage percentages mean</label></li>
+                        <li><input type="checkbox" id="understanding2"> <label for="understanding2">I can read the HTML coverage report</label></li>
+                        <li><input type="checkbox" id="understanding3"> <label for="understanding3">I know the difference between green and red lines</label></li>
+                    </div>
+                </div>
+
+                <div class="completion-card">
+                    <h4>Practical Skills</h4>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="practical1"> <label for="practical1">I can run coverage analysis</label></li>
+                        <li><input type="checkbox" id="practical2"> <label for="practical2">I can identify untested code</label></li>
+                        <li><input type="checkbox" id="practical3"> <label for="practical3">I can write tests to improve coverage</label></li>
+                    </div>
+                </div>
+
+                <div class="completion-card">
+                    <h4>Workflow</h4>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="workflow1"> <label for="workflow1">I know how to check coverage before committing code</label></li>
+                        <li><input type="checkbox" id="workflow2"> <label for="workflow2">I understand how tests can break when code changes</label></li>
+                        <li><input type="checkbox" id="workflow3"> <label for="workflow3">I can fix broken tests</label></li>
+                    </div>
+                </div>
+
+                <div class="completion-card">
+                    <h4>Next Steps</h4>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="nextsteps1"> <label for="nextsteps1">I have a coverage goal for my project</label></li>
+                        <li><input type="checkbox" id="nextsteps2"> <label for="nextsteps2">I know which areas need more tests</label></li>
+                        <li><input type="checkbox" id="nextsteps3"> <label for="nextsteps3">I'm ready to make testing part of my daily routine</label></li>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-success" style="margin-top: 2rem;">
+                <span>🎉</span>
+                <div>
+                    <h3>Congratulations!</h3>
+                    <p>You've completed the hands-on coverage exercise! You now have practical experience with running coverage analysis, reading coverage reports, writing tests to improve coverage, understanding the relationship between code changes and tests, and setting up a testing workflow.</p>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <span>📚</span>
+                <div>
+                    <strong>Your homework:</strong> Run coverage analysis once a day for the next week and try to improve your percentage by 5% each day.
+                    <br><br>
+                    <strong>Remember:</strong> Quality over quantity! It's better to have 80% coverage with good, meaningful tests than 95% coverage with shallow tests that don't catch real bugs.
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem; font-style: italic; color: rgba(255,255,255,0.8);">
+                <em>Ready for the next level? Check out integration testing, golden tests, and mocking in Flutter!</em>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Save and load functionality
+        function saveProgress() {
+            const formData = {};
+            
+            // Save all input fields
+            document.querySelectorAll('input, select, textarea').forEach(element => {
+                if (element.type === 'checkbox') {
+                    formData[element.id] = element.checked;
+                } else {
+                    formData[element.id] = element.value;
+                }
+            });
+            
+            localStorage.setItem('coverageExerciseProgress', JSON.stringify(formData));
+            
+            // Show save status
+            const saveStatus = document.getElementById('saveStatus');
+            saveStatus.classList.add('show');
+            setTimeout(() => {
+                saveStatus.classList.remove('show');
+            }, 2000);
+            
+            updateProgress();
+        }
+
+        function loadProgress() {
+            const savedData = localStorage.getItem('coverageExerciseProgress');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                
+                Object.keys(formData).forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        if (element.type === 'checkbox') {
+                            element.checked = formData[id];
+                        } else {
+                            element.value = formData[id];
+                        }
+                    }
+                });
+            }
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const progress = (checkedBoxes.length / checkboxes.length) * 100;
+            
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = `${progress}%`;
+        }
+
+        // Copy to clipboard functionality
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Auto-save on input changes
+        document.addEventListener('change', saveProgress);
+        document.addEventListener('input', debounce(saveProgress, 1000));
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all exercises
+        document.querySelectorAll('.exercise').forEach(exercise => {
+            observer.observe(exercise);
+        });
+
+        // Navigation highlighting
+        const navLinks = document.querySelectorAll('.nav-floating a');
+        const sections = document.querySelectorAll('section');
+
+        function updateActiveNav() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNav);
+        updateActiveNav();
+
+        // Smooth scroll for navigation links
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveProgress();
+            }
+            if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+                e.preventDefault();
+                if (confirm('Reset all progress? This cannot be undone.')) {
+                    localStorage.removeItem('coverageExerciseProgress');
+                    location.reload();
+                }
+            }
+        });
+
+        // Load progress on page load
+        loadProgress();
+    </script>
+</body>
+</html>

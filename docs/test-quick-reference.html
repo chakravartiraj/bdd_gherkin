@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Flutter Test Quick Reference</title>
+    <style>
+        :root {
+            --primary-color: #1976D2;
+            --secondary-color: #42A5F5;
+            --accent-color: #FFC107;
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --error-color: #F44336;
+            --bg-primary: #0A0E27;
+            --bg-secondary: #1A1F3A;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0BEC5;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            background: var(--gradient);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '🚀';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 4rem;
+            opacity: 0.2;
+            animation: rocket 2s ease-in-out infinite;
+        }
+
+        @keyframes rocket {
+            0%, 100% { transform: translateY(0px) rotate(45deg); }
+            50% { transform: translateY(-10px) rotate(50deg); }
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .nav-floating {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 200px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .nav-floating h3 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .nav-floating a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.2rem 0;
+            font-size: 0.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-floating a:hover,
+        .nav-floating a.active {
+            color: var(--secondary-color);
+        }
+
+        .section {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(255,255,255,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section h3 {
+            color: var(--accent-color);
+            margin: 1rem 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .command-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            border-left: 4px solid var(--accent-color);
+            transition: transform 0.3s ease;
+        }
+
+        .command-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .command-card h4 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) transparent;
+        }
+
+        .code-block::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .code-block::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 3px;
+        }
+
+        .code-block::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: var(--secondary-color);
+            white-space: pre;
+            overflow-x: auto;
+            word-wrap: normal;
+            word-break: normal;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+            background: var(--secondary-color);
+        }
+
+        .copy-btn.copied {
+            background: var(--success-color);
+        }
+
+        .inline-code {
+            background: var(--bg-primary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            border: 1px solid;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .alert-success { 
+            background: rgba(76, 175, 80, 0.1); 
+            border-color: var(--success-color);
+            color: #81C784;
+        }
+        .alert-warning { 
+            background: rgba(255, 152, 0, 0.1); 
+            border-color: var(--warning-color);
+            color: #FFB74D;
+        }
+        .alert-error { 
+            background: rgba(244, 67, 54, 0.1); 
+            border-color: var(--error-color);
+            color: #E57373;
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .checklist li {
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checklist input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary-color);
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .tip-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tip-card.do {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .tip-card.dont {
+            border-left: 4px solid var(--error-color);
+        }
+
+        .tip-card h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tip-card.do h4 {
+            color: var(--success-color);
+        }
+
+        .tip-card.dont h4 {
+            color: var(--error-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem 0.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-floating {
+                width: calc(100% - 1rem);
+                left: 0.5rem;
+                right: 0.5rem;
+                top: 0.5rem;
+                position: relative;
+                margin-bottom: 1rem;
+                max-height: none;
+            }
+
+            .command-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-floating">
+        <h3>📚 Quick Nav</h3>
+        <a href="#commands">Commands</a>
+        <a href="#patterns">Test Patterns</a>
+        <a href="#finding">Finding Widgets</a>
+        <a href="#expectations">Expectations</a>
+        <a href="#interactions">Interactions</a>
+        <a href="#timing">Timing</a>
+        <a href="#debugging">Debugging</a>
+        <a href="#setup">Setup</a>
+        <a href="#bdd">BDD Steps</a>
+        <a href="#coverage">Coverage</a>
+        <a href="#errors">Common Errors</a>
+        <a href="#organization">File Organization</a>
+        <a href="#practices">Best Practices</a>
+        <a href="#utilities">Utilities</a>
+        <a href="#checklist">Quick Start</a>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>🚀 Flutter Test Quick Reference</h1>
+            <p>Quick commands and patterns for Flutter testing. Bookmark this page for instant access to testing essentials!</p>
+        </div>
+
+        <section id="commands" class="section">
+            <h2>⚡ Essential Commands</h2>
+            
+            <div class="command-grid">
+                <div class="command-card">
+                    <h4>Basic Testing</h4>
+                    <div class="code-block">
+                        <pre># Run all tests
+flutter test
+
+# Run specific test file
+flutter test test/widget_test.dart
+
+# Run with detailed output
+flutter test --verbose
+
+# Run tests in watch mode
+flutter test --watch</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, 'flutter test\nflutter test test/widget_test.dart\nflutter test --verbose\nflutter test --watch')">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>Coverage Testing</h4>
+                    <div class="code-block">
+                        <pre># Run tests with coverage
+flutter test --coverage
+
+# Generate HTML coverage report
+genhtml coverage/lcov.info -o coverage/html
+
+# Open coverage report
+xdg-open coverage/html/index.html</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, 'flutter test --coverage\ngenhtml coverage/lcov.info -o coverage/html\nxdg-open coverage/html/index.html')">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>BDD Testing</h4>
+                    <div class="code-block">
+                        <pre># Generate BDD test code from .feature files
+dart run build_runner build
+
+# Watch for changes and regenerate
+dart run build_runner watch
+
+# Run only BDD tests
+flutter test test/counter_test.dart</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, 'dart run build_runner build\ndart run build_runner watch\nflutter test test/counter_test.dart')">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="patterns" class="section">
+            <h2>📝 Common Test Patterns</h2>
+            
+            <h3>Widget Test Template</h3>
+            <div class="code-block">
+                <pre>testWidgets('description of what is being tested', (WidgetTester tester) async {
+  // Arrange: Set up the widget
+  await tester.pumpWidget(const MyApp());
+
+  // Act: Perform user actions
+  await tester.tap(find.byIcon(Icons.add));
+  await tester.pump();
+
+  // Assert: Verify expected results
+  expect(find.text('1'), findsOneWidget);
+});</pre>
+                <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+            </div>
+
+            <h3>Unit Test Template</h3>
+            <div class="code-block">
+                <pre>test('description of what is being tested', () {
+  // Arrange
+  final calculator = Calculator();
+  
+  // Act
+  final result = calculator.add(2, 3);
+  
+  // Assert
+  expect(result, equals(5));
+});</pre>
+                <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+            </div>
+
+            <h3>BDD Scenario Template</h3>
+            <div class="code-block">
+                <pre>Scenario: User performs an action
+  Given the app is running
+  When I tap {Icons.add} icon
+  Then I see {1} text</pre>
+                <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+            </div>
+        </section>
+
+        <section id="finding" class="section">
+            <h2>🔍 Finding Widgets</h2>
+            
+            <div class="command-grid">
+                <div class="command-card">
+                    <h4>By Text</h4>
+                    <div class="code-block">
+                        <pre>find.text('Hello')              // Find exact text
+find.textContaining('Hello')    // Find text containing substring</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>By Widget Type</h4>
+                    <div class="code-block">
+                        <pre>find.byType(FloatingActionButton)  // Find by widget class
+find.byIcon(Icons.add)            // Find by icon
+find.byKey(const Key('my-key'))   // Find by key</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>By Semantics</h4>
+                    <div class="code-block">
+                        <pre>find.bySemanticsLabel('Increment')  // Find by accessibility label
+find.byTooltip('Add item')          // Find by tooltip</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="expectations" class="section">
+            <h2>✅ Common Expectations</h2>
+            
+            <div class="command-grid">
+                <div class="command-card">
+                    <h4>Widget Existence</h4>
+                    <div class="code-block">
+                        <pre>expect(find.text('Hello'), findsOneWidget);     // Exactly one
+expect(find.text('Item'), findsNWidgets(3));    // Exactly N
+expect(find.text('Hidden'), findsNothing);      // None found
+expect(find.text('Maybe'), findsAny);           // At least one</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>Widget Properties</h4>
+                    <div class="code-block">
+                        <pre>final textWidget = tester.widget&lt;Text&gt;(find.text('Hello'));
+expect(textWidget.style!.color, equals(Colors.red));
+
+final buttonWidget = tester.widget&lt;ElevatedButton&gt;(find.byType(ElevatedButton));
+expect(buttonWidget.enabled, isTrue);</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>Navigation</h4>
+                    <div class="code-block">
+                        <pre>// Verify route navigation
+await tester.tap(find.text('Next Page'));
+await tester.pumpAndSettle();
+expect(find.text('Second Page'), findsOneWidget);</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="interactions" class="section">
+            <h2>🎭 User Interactions</h2>
+            
+            <div class="command-grid">
+                <div class="command-card">
+                    <h4>Tapping</h4>
+                    <div class="code-block">
+                        <pre>await tester.tap(find.text('Button'));          // Tap widget
+await tester.tap(find.byIcon(Icons.add));       // Tap icon
+await tester.longPress(find.text('Hold me'));   // Long press</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>Text Input</h4>
+                    <div class="code-block">
+                        <pre>await tester.enterText(find.byType(TextField), 'Hello');
+await tester.pump();</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>Scrolling</h4>
+                    <div class="code-block">
+                        <pre>await tester.scroll(
+  find.byType(ListView),
+  const Offset(0, -300),  // Scroll up 300 pixels
+);
+await tester.pump();</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>Gestures</h4>
+                    <div class="code-block">
+                        <pre>await tester.drag(find.text('Draggable'), const Offset(300, 0));
+await tester.fling(find.byType(ListView), const Offset(0, -200), 1000);</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="timing" class="section">
+            <h2>⏰ Timing and Animation</h2>
+            
+            <div class="command-grid">
+                <div class="command-card">
+                    <h4>Waiting for Updates</h4>
+                    <div class="code-block">
+                        <pre>await tester.pump();                    // Single frame
+await tester.pumpAndSettle();          // Wait for animations
+await tester.pump(Duration(seconds: 1)); // Wait specific duration</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>Testing Animations</h4>
+                    <div class="code-block">
+                        <pre>await tester.pumpWidget(MyAnimatedWidget());
+await tester.pump();                    // Start animation
+await tester.pump(Duration(milliseconds: 100)); // Mid-animation
+await tester.pumpAndSettle();          // Animation complete</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="debugging" class="section">
+            <h2>🐛 Debugging Tests</h2>
+            
+            <div class="command-grid">
+                <div class="command-card">
+                    <h4>Print Widget Tree</h4>
+                    <div class="code-block">
+                        <pre>debugDumpApp();  // Print entire widget tree</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, 'debugDumpApp();')">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>Find All Widgets</h4>
+                    <div class="code-block">
+                        <pre>final allButtons = find.byType(ElevatedButton);
+print('Found ${allButtons.evaluate().length} buttons');</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>Screenshot Testing</h4>
+                    <div class="code-block">
+                        <pre>await expectLater(
+  find.byType(MyWidget),
+  matchesGoldenFile('my_widget.png'),
+);</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="setup" class="section">
+            <h2>🏗️ Test Setup & Teardown</h2>
+            
+            <h3>Group Tests</h3>
+            <div class="code-block">
+                <pre>group('Counter tests', () {
+  testWidgets('increments', (tester) async { /* test */ });
+  testWidgets('decrements', (tester) async { /* test */ });
+});</pre>
+                <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+            </div>
+
+            <h3>Setup and Cleanup</h3>
+            <div class="code-block">
+                <pre>group('Database tests', () {
+  late Database db;
+  
+  setUp(() async {
+    db = await Database.create();
+  });
+  
+  tearDown(() async {
+    await db.close();
+  });
+  
+  test('can insert data', () async {
+    // Test uses db created in setUp
+  });
+});</pre>
+                <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+            </div>
+        </section>
+
+        <section id="bdd" class="section">
+            <h2>🎯 BDD Step Definitions</h2>
+            
+            <h3>Common Step Patterns</h3>
+            <div class="code-block">
+                <pre>// Given steps (setup)
+Given('the app is running', () async {
+  await tester.pumpWidget(const MyApp());
+});
+
+// When steps (actions)
+When('I tap {string} button', (String buttonText) async {
+  await tester.tap(find.text(buttonText));
+  await tester.pump();
+});
+
+// Then steps (assertions)
+Then('I see {string} text', (String text) async {
+  expect(find.text(text), findsOneWidget);
+});</pre>
+                <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+            </div>
+        </section>
+
+        <section id="coverage" class="section">
+            <h2>📊 Coverage Commands</h2>
+            
+            <div class="command-grid">
+                <div class="command-card">
+                    <h4>Generate Reports</h4>
+                    <div class="code-block">
+                        <pre># Basic coverage
+flutter test --coverage
+
+# With custom exclusions
+flutter test --coverage --test-randomize-ordering-seed=random
+
+# Generate filtered HTML report
+genhtml coverage/lcov.info -o coverage/html --exclude '**/*.g.dart'</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h4>Coverage Targets</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0.5rem 0;">
+                        <li>🔴 <strong>70%+</strong>: Minimum acceptable</li>
+                        <li>🟡 <strong>80%+</strong>: Good coverage</li>
+                        <li>🟢 <strong>90%+</strong>: Excellent coverage</li>
+                        <li>🔵 <strong>95%+</strong>: Very thorough (may be overkill)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="errors" class="section">
+            <h2>🚨 Common Errors & Solutions</h2>
+            
+            <div class="alert alert-error">
+                <span>❌</span>
+                <div>
+                    <strong>"Could not find widget"</strong><br>
+                    <div class="code-block">
+                        <pre>// Problem: Widget not rendered yet
+await tester.tap(find.text('Button'));
+
+// Solution: Wait for widget to appear
+await tester.pumpAndSettle();
+await tester.tap(find.text('Button'));</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <span>⚠️</span>
+                <div>
+                    <strong>"Timed out waiting for..."</strong><br>
+                    <div class="code-block">
+                        <pre>// Problem: Animation taking too long
+await tester.pumpAndSettle();
+
+// Solution: Increase timeout or pump manually
+await tester.pumpAndSettle(Duration(seconds: 10));</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-error">
+                <span>❌</span>
+                <div>
+                    <strong>"Multiple widgets found"</strong><br>
+                    <div class="code-block">
+                        <pre>// Problem: Multiple widgets with same text
+expect(find.text('Submit'), findsOneWidget);
+
+// Solution: Be more specific
+expect(find.descendant(
+  of: find.byType(Form),
+  matching: find.text('Submit'),
+), findsOneWidget);</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="organization" class="section">
+            <h2>📁 File Organization</h2>
+            
+            <h3>Recommended Structure</h3>
+            <div class="code-block">
+                <pre>test/
+├── widget_test.dart           # Basic widget tests
+├── unit/
+│   ├── models/
+│   ├── services/
+│   └── utils/
+├── widget/
+│   ├── pages/
+│   ├── components/
+│   └── forms/
+├── integration/
+│   └── app_test.dart
+├── bdd/
+│   ├── features/
+│   │   └── *.feature
+│   ├── step/
+│   │   └── *.dart
+│   └── *_test.dart
+└── helpers/
+    ├── test_helpers.dart
+    └── mocks.dart</pre>
+                <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+            </div>
+        </section>
+
+        <section id="practices" class="section">
+            <h2>🎨 Testing Best Practices</h2>
+            
+            <div class="tips-grid">
+                <div class="tip-card do">
+                    <h4>✅ Do</h4>
+                    <ul style="margin: 0; padding-left: 1rem;">
+                        <li>Test user behavior, not implementation</li>
+                        <li>Use descriptive test names</li>
+                        <li>Keep tests independent</li>
+                        <li>Test one thing at a time</li>
+                        <li>Use Page Object pattern for complex UIs</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card dont">
+                    <h4>❌ Don't</h4>
+                    <ul style="margin: 0; padding-left: 1rem;">
+                        <li>Test private methods directly</li>
+                        <li>Make tests depend on each other</li>
+                        <li>Use real network calls</li>
+                        <li>Test framework internals</li>
+                        <li>Ignore flaky tests</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="utilities" class="section">
+            <h2>🔧 Useful Utilities</h2>
+            
+            <h3>Custom Matchers</h3>
+            <div class="code-block">
+                <pre>Matcher hasTextStyle(TextStyle expectedStyle) {
+  return predicate&lt;Text&gt;((widget) =&gt; widget.style == expectedStyle);
+}
+
+// Usage
+expect(find.byType(Text), hasTextStyle(TextStyle(color: Colors.red)));</pre>
+                <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+            </div>
+
+            <h3>Test Helpers</h3>
+            <div class="code-block">
+                <pre>Future&lt;void&gt; pumpMyApp(WidgetTester tester, {Widget? home}) async {
+  await tester.pumpWidget(MaterialApp(home: home ?? MyHomePage()));
+}
+
+Future&lt;void&gt; tapAndSettle(WidgetTester tester, Finder finder) async {
+  await tester.tap(finder);
+  await tester.pumpAndSettle();
+}</pre>
+                <button class="copy-btn" onclick="copyToClipboard(this, this.previousElementSibling.textContent)">Copy</button>
+            </div>
+        </section>
+
+        <section id="checklist" class="section">
+            <h2>🏃‍♂️ Quick Start Checklist</h2>
+            
+            <div class="checklist">
+                <li><input type="checkbox"> Run existing tests: <span class="inline-code">flutter test</span></li>
+                <li><input type="checkbox"> Create your first widget test</li>
+                <li><input type="checkbox"> Add a BDD scenario in <span class="inline-code">.feature</span> file</li>
+                <li><input type="checkbox"> Generate BDD tests: <span class="inline-code">dart run build_runner build</span></li>
+                <li><input type="checkbox"> Check coverage: <span class="inline-code">flutter test --coverage</span></li>
+                <li><input type="checkbox"> Open coverage report in browser</li>
+            </div>
+
+            <h3>📚 Learn More</h3>
+            <div class="command-grid">
+                <div class="command-card">
+                    <h4>Next Steps</h4>
+                    <ul style="margin: 0; padding-left: 1rem;">
+                        <li><strong><a href="flutter-test-walkthrough.html" style="color: var(--secondary-color);">Flutter Test Walkthrough</a></strong> - Complete beginner guide</li>
+                        <li><strong><a href="hands-on-test-exercise.html" style="color: var(--secondary-color);">Hands-On Exercises</a></strong> - Practice with real examples</li>
+                        <li><strong><a href="test-README.html" style="color: var(--secondary-color);">Test Learning Center</a></strong> - Full learning path</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Copy to clipboard functionality
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Save checkbox states
+        function saveProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const states = {};
+            checkboxes.forEach((checkbox, index) => {
+                states[index] = checkbox.checked;
+            });
+            localStorage.setItem('testQuickRefProgress', JSON.stringify(states));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('testQuickRefProgress');
+            if (saved) {
+                const states = JSON.parse(saved);
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach((checkbox, index) => {
+                    if (states[index] !== undefined) {
+                        checkbox.checked = states[index];
+                    }
+                });
+            }
+        }
+
+        // Auto-save progress
+        document.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox') {
+                saveProgress();
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Navigation highlighting
+        const navLinks = document.querySelectorAll('.nav-floating a');
+        const sections = document.querySelectorAll('.section');
+
+        function updateActiveNav() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNav);
+        updateActiveNav();
+
+        // Smooth scroll for navigation links
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Load progress on page load
+        loadProgress();
+    </script>
+</body>
+</html>

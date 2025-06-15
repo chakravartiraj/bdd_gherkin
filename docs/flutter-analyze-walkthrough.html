@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Flutter Analyze: Complete Beginner's Guide</title>
+    <style>
+        :root {
+            --primary-color: #0175c2;
+            --secondary-color: #02569b;
+            --accent-color: #13b9fd;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            --info-color: #2196f3;
+            --background-color: #ffffff;
+            --surface-color: #f8f9fa;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --code-background: #f8f9fa;
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .header-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: var(--accent-color);
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+
+        .toc {
+            background: var(--surface-color);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .toc h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .toc ol {
+            list-style: none;
+            counter-reset: toc-counter;
+        }
+
+        .toc li {
+            counter-increment: toc-counter;
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text-primary);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .toc a:before {
+            content: counter(toc-counter);
+            background: var(--primary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        .toc a:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateX(8px);
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem 0;
+        }
+
+        h4 {
+            color: var(--text-primary);
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .emoji-header {
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .highlight-box {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .highlight-box.info {
+            background: #e3f2fd;
+            border-left-color: var(--info-color);
+        }
+
+        .highlight-box.success {
+            background: #e8f5e8;
+            border-left-color: var(--success-color);
+        }
+
+        .highlight-box.warning {
+            background: #fff3e0;
+            border-left-color: var(--warning-color);
+        }
+
+        .highlight-box.error {
+            background: #ffebee;
+            border-left-color: var(--error-color);
+        }
+
+        code {
+            background: var(--code-background);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+            font-size: 0.9em;
+            color: var(--secondary-color);
+        }
+
+        pre {
+            background: var(--code-background);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .code-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px 8px 0 0;
+            font-size: 0.875rem;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .code-block {
+            background: var(--code-background);
+            border-radius: 0 0 8px 8px;
+            margin-top: 0;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .comparison .before {
+            border-left: 4px solid var(--error-color);
+        }
+
+        .comparison .after {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .comparison h4 {
+            color: white;
+            padding: 0.5rem 1rem;
+            margin: 0;
+            font-size: 0.875rem;
+        }
+
+        .comparison .before h4 {
+            background: var(--error-color);
+        }
+
+        .comparison .after h4 {
+            background: var(--success-color);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: var(--surface-color);
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .checklist li {
+            margin: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .checklist li:before {
+            content: '✅';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .benefit-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--accent-color);
+            transition: transform 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .benefit-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .command-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'SF Mono', Monaco, monospace;
+            position: relative;
+        }
+
+        .command-box:before {
+            content: '$ ';
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .command-box:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-links {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .nav-link {
+            background: var(--surface-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.875rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .nav-links {
+                position: static;
+                justify-content: center;
+                margin-top: 2rem;
+            }
+        }
+
+        .collapsible {
+            margin: 1rem 0;
+        }
+
+        .collapsible-header {
+            background: var(--surface-color);
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            transition: background 0.3s ease;
+        }
+
+        .collapsible-header:hover {
+            background: var(--border-color);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible.active .collapsible-content {
+            max-height: 1000px;
+            padding: 1rem;
+        }
+
+        .expand-icon {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .expand-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <header>
+        <div class="container">
+            <h1>🔍 Flutter Analyze: Complete Beginner's Guide</h1>
+            <p class="header-subtitle">Master static analysis with the Feynman Technique - Learn complex concepts through simple explanations</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="toc">
+            <h2>📚 Table of Contents</h2>
+            <ol>
+                <li><a href="#what-is-flutter-analyze">What is Flutter Analyze? (The Simple Explanation)</a></li>
+                <li><a href="#why-should-you-care">Why Should You Care?</a></li>
+                <li><a href="#setting-up-analysis-rules">Setting Up Analysis Rules</a></li>
+                <li><a href="#running-your-first-analysis">Running Your First Analysis</a></li>
+                <li><a href="#understanding-analysis-results">Understanding Analysis Results</a></li>
+                <li><a href="#common-issues-and-how-to-fix-them">Common Issues and How to Fix Them</a></li>
+                <li><a href="#customizing-analysis-rules">Customizing Analysis Rules</a></li>
+                <li><a href="#ide-integration">IDE Integration</a></li>
+                <li><a href="#daily-workflow">Daily Workflow</a></li>
+                <li><a href="#advanced-tips">Advanced Tips</a></li>
+            </ol>
+        </div>
+
+        <div class="content">
+            <section id="what-is-flutter-analyze" class="section">
+                <h2><span class="emoji-header">🤔</span>What is Flutter Analyze?</h2>
+                
+                <h3><span class="emoji-header">💡</span>The Simple Explanation</h3>
+                <p>Imagine you're writing an essay and you have a grammar checker that:</p>
+                <ul class="checklist">
+                    <li><strong>Finds spelling mistakes</strong> before you submit</li>
+                    <li><strong>Suggests better sentence structure</strong></li>
+                    <li><strong>Points out style inconsistencies</strong></li>
+                    <li><strong>Warns about unclear writing</strong></li>
+                </ul>
+
+                <div class="highlight-box info">
+                    <p><strong>Flutter Analyze</strong> is like a super-smart grammar checker for your code! It reads your Dart/Flutter code and tells you:</p>
+                    <ul>
+                        <li>🐛 <strong>Potential bugs</strong> (like using a variable that might be null)</li>
+                        <li>🎨 <strong>Style issues</strong> (like inconsistent naming)</li>
+                        <li>⚡ <strong>Performance problems</strong> (like inefficient code patterns)</li>
+                        <li>🧹 <strong>Code smells</strong> (like unused imports)</li>
+                    </ul>
+                </div>
+
+                <h3><span class="emoji-header">🎯</span>Real Example</h3>
+                <div class="comparison">
+                    <div class="before">
+                        <h4>❌ BAD CODE (Analyzer will catch these issues)</h4>
+                        <pre><code>import 'package:flutter/material.dart';  // Unused import
+import 'package:http/http.dart';         // Unused import
+
+class counter extends StatefulWidget {   // Should be PascalCase: Counter
+  counter({Key? key}) : super(key: key); // Constructor name should match class
+  
+  @override
+  _counterState createState() => _counterState(); // Should be _CounterState
+}
+
+class _counterState extends State&lt;counter&gt; {
+  int count;  // Should be initialized (potential null safety issue)
+  
+  void increment() {
+    setState(() {
+      count++;  // This might crash! count could be null
+    });
+  }
+}</code></pre>
+                    </div>
+                    <div class="after">
+                        <h4>✅ After running flutter analyze:</h4>
+                        <pre><code>Analyzing your_project...
+
+lib/main.dart:1:8 • Unused import 'package:flutter/material.dart' • unused_import
+lib/main.dart:2:8 • Unused import 'package:http/http.dart' • unused_import
+lib/main.dart:4:7 • Class name should use PascalCase • camel_case_types
+lib/main.dart:5:3 • Constructor name should match class name • matching_constructor_name
+lib/main.dart:10:7 • Field should be initialized • uninitialized_field</code></pre>
+                    </div>
+                </div>
+
+                <div class="highlight-box success">
+                    <p><strong>See how it caught 5 potential problems before you even ran the app!</strong></p>
+                </div>
+            </section>
+
+            <section id="why-should-you-care" class="section">
+                <h2><span class="emoji-header">🚨</span>Why Should You Care?</h2>
+
+                <h3><span class="emoji-header">💥</span>Real-World Horror Stories</h3>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <h4>🔥 The Null Pointer Crash</h4>
+                        <p>A developer forgot to initialize a variable. The app crashed for 10,000 users on launch day.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4>🐌 The Performance Killer</h4>
+                        <p>Inefficient code patterns made an app so slow it got 1-star reviews.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4>🤯 The Maintenance Nightmare</h4>
+                        <p>Inconsistent code style made it impossible for teams to collaborate.</p>
+                    </div>
+                </div>
+
+                <h3><span class="emoji-header">✅</span>Benefits of Using Flutter Analyze</h3>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <h4>🐛 Catch bugs early</h4>
+                        <p>Find issues before users see them!</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4>📈 Better code quality</h4>
+                        <p>Consistent, readable code</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4>⚡ Performance improvements</h4>
+                        <p>Analyzer suggests optimizations</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4>🤝 Team collaboration</h4>
+                        <p>Everyone follows the same rules</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h4>😴 Sleep better</h4>
+                        <p>Confidence your code follows best practices</p>
+                    </div>
+                </div>
+
+                <h3><span class="emoji-header">📊</span>Industry Impact</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Improvement</th>
+                                <th>Source</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Bug Reduction</td>
+                                <td>40% fewer bugs</td>
+                                <td>Companies using static analysis</td>
+                            </tr>
+                            <tr>
+                                <td>Code Review Speed</td>
+                                <td>60% faster reviews</td>
+                                <td>Consistent style enforcement</td>
+                            </tr>
+                            <tr>
+                                <td>Analysis Rules</td>
+                                <td>200+ rules used</td>
+                                <td>Google's Flutter team</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="setting-up-analysis-rules" class="section">
+                <h2><span class="emoji-header">⚙️</span>Setting Up Analysis Rules</h2>
+
+                <h3>Step 1: Understanding analysis_options.yaml</h3>
+                <p>Every Flutter project should have an <code>analysis_options.yaml</code> file. Think of it as the "rule book" for your code.</p>
+
+                <div class="highlight-box info">
+                    <p>Your current setup includes professional-grade rules that catch:</p>
+                    <ul>
+                        <li><strong>Style issues</strong> (prefer_single_quotes, prefer_const_constructors)</li>
+                        <li><strong>Performance problems</strong> (avoid_function_literals_in_foreach_calls)</li>
+                        <li><strong>Security concerns</strong> (avoid_web_libraries_in_flutter)</li>
+                        <li><strong>Code organization</strong> (directives_ordering, file_names)</li>
+                    </ul>
+                </div>
+
+                <h3><span class="emoji-header">🔍</span>What Your Current Setup Means</h3>
+                <div class="command-box">
+include: package:flutter_lints/flutter.yaml  # Basic 25 rules
++ 40+ additional professional rules          # Our upgrade
+= 65+ total rules protecting your code!
+                </div>
+
+                <h3>Step 2: Understanding Rule Types</h3>
+                <div class="comparison">
+                    <div class="before">
+                        <h4>🔴 Errors - Code that will definitely break:</h4>
+                        <pre><code>int number = "hello";  // ERROR: Can't assign String to int</code></pre>
+                    </div>
+                    <div style="background: #fff3e0; border-left: 4px solid var(--warning-color);">
+                        <h4 style="background: var(--warning-color);">🟡 Warnings - Code that might cause problems:</h4>
+                        <pre><code>String? name;
+print(name.length);  // WARNING: name might be null</code></pre>
+                    </div>
+                </div>
+                <div style="background: #e3f2fd; border-left: 4px solid var(--info-color); margin-top: 1rem;">
+                    <h4 style="background: var(--info-color); color: white; padding: 0.5rem 1rem; margin: 0;">🔵 Lints - Style and best practice suggestions:</h4>
+                    <pre style="margin-top: 0;"><code>class myWidget extends StatelessWidget {  // LINT: Should be MyWidget</code></pre>
+                </div>
+            </section>
+
+            <section id="running-your-first-analysis" class="section">
+                <h2><span class="emoji-header">🚀</span>Running Your First Analysis</h2>
+
+                <h3><span class="emoji-header">💻</span>Method 1: Command Line (The Classic Way)</h3>
+                <div class="command-box">
+                    # Navigate to your Flutter project
+cd /home/io/StudioProjects/bdd_gherkin
+
+# Run the analyzer
+flutter analyze
+                    <button class="copy-btn" onclick="copyToClipboard('flutter analyze')">Copy</button>
+                </div>
+
+                <div class="highlight-box success">
+                    <p><strong>What you just experienced:</strong></p>
+                    <ul class="checklist">
+                        <li><strong>Found 3 issues</strong> in your code</li>
+                        <li><strong>Fixed all 3 issues</strong> using the suggestions</li>
+                        <li><strong>Now shows "No issues found!"</strong></li>
+                    </ul>
+                    <p>This is the complete cycle: Find → Fix → Verify → Celebrate! 🎉</p>
+                </div>
+
+                <h3><span class="emoji-header">👁️</span>Method 2: Continuous Analysis (Watch Mode)</h3>
+                <div class="command-box">
+# Run analyzer continuously (watches for file changes)
+dart analyze --watch
+                    <button class="copy-btn" onclick="copyToClipboard('dart analyze --watch')">Copy</button>
+                </div>
+
+                <h3><span class="emoji-header">🎨</span>Method 3: IDE Integration (Automatic)</h3>
+                <p>If you're using VS Code or Android Studio, the analyzer runs automatically and shows:</p>
+                <ul>
+                    <li>🔴 <strong>Red squiggly lines</strong> for errors</li>
+                    <li>🟡 <strong>Yellow squiggly lines</strong> for warnings</li>
+                    <li>🔵 <strong>Blue squiggly lines</strong> for lints</li>
+                </ul>
+
+                <h3><span class="emoji-header">✨</span>Method 4: Auto-Fix Magic</h3>
+                <div class="command-box">
+# Let Dart fix issues automatically where possible
+dart fix --apply
+                    <button class="copy-btn" onclick="copyToClipboard('dart fix --apply')">Copy</button>
+                </div>
+            </section>
+
+            <section id="understanding-analysis-results" class="section">
+                <h2><span class="emoji-header">📊</span>Understanding Analysis Results</h2>
+
+                <h3><span class="emoji-header">🔍</span>Reading the Output Format</h3>
+                <pre><code>info • Unnecessary use of double quotes • test/counter_test.dart:21:30 • prefer_single_quotes
+│    │  │                                │                            │   │
+│    │  │                                │                            │   └── Rule name
+│    │  │                                │                            └──── Column number
+│    │  │                                └─────────────────────────────── Line number  
+│    │  └───────────────────────────────────────────────────────────── Description
+│    └──────────────────────────────────────────────────────────────── File path
+└───────────────────────────────────────────────────────────────────── Severity level</code></pre>
+
+                <h3><span class="emoji-header">🚦</span>Severity Levels</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>What It Means</th>
+                                <th>What To Do</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>🔴 <strong>error</strong></td>
+                                <td>Code won't compile or will crash</td>
+                                <td><strong>Fix immediately</strong></td>
+                            </tr>
+                            <tr>
+                                <td>🟡 <strong>warning</strong></td>
+                                <td>Potential runtime problems</td>
+                                <td><strong>Fix soon</strong></td>
+                            </tr>
+                            <tr>
+                                <td>🔵 <strong>info</strong></td>
+                                <td>Style/best practice suggestions</td>
+                                <td><strong>Fix when convenient</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3><span class="emoji-header">🎯</span>What We Fixed (Learning from Real Examples)</h3>
+                
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Issue 1: Unnecessary double quotes (prefer_single_quotes)</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="comparison">
+                            <div class="before">
+                                <h4>BEFORE (analyzer complained)</h4>
+                                <pre><code>await iSeeText(tester, "You have pushed the button this many times:");</code></pre>
+                            </div>
+                            <div class="after">
+                                <h4>AFTER (analyzer happy)</h4>
+                                <pre><code>await iSeeText(tester, 'You have pushed the button this many times:');</code></pre>
+                            </div>
+                        </div>
+                        <p><strong>Why it matters:</strong> Consistent quote style makes code more readable and follows Dart conventions.</p>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Issue 2: Missing const keyword (prefer_const_constructors)</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="comparison">
+                            <div class="before">
+                                <h4>BEFORE (analyzer complained)</h4>
+                                <pre><code>await tester.pumpWidget(MyApp());</code></pre>
+                            </div>
+                            <div class="after">
+                                <h4>AFTER (analyzer happy)</h4>
+                                <pre><code>await tester.pumpWidget(const MyApp());</code></pre>
+                            </div>
+                        </div>
+                        <p><strong>Why it matters:</strong> <code>const</code> constructors improve performance by reusing widget instances.</p>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Issue 3: Import ordering (directives_ordering)</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <p>The analyzer ensures imports are grouped and sorted consistently:</p>
+                        <ol>
+                            <li>Dart core libraries (<code>dart:...</code>)</li>
+                            <li>Flutter libraries (<code>package:flutter/...</code>)</li>
+                            <li>Third-party packages (<code>package:other/...</code>)</li>
+                            <li>Relative imports (<code>../...</code> or <code>./...</code>)</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section id="common-issues-and-how-to-fix-them" class="section">
+                <h2><span class="emoji-header">🐛</span>Common Issues and How to Fix Them</h2>
+
+                <h3><span class="emoji-header">🎯</span>Most Common Beginner Issues</h3>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>1. Unused Imports</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="comparison">
+                            <div class="before">
+                                <h4>❌ Problem:</h4>
+                                <pre><code>import 'package:http/http.dart'; // You imported but never used
+import 'package:flutter/material.dart';
+
+class MyWidget extends StatelessWidget {
+  // Only using material.dart, not http.dart
+}</code></pre>
+                            </div>
+                            <div class="after">
+                                <h4>✅ Solution:</h4>
+                                <pre><code>// Remove unused imports
+import 'package:flutter/material.dart';
+
+class MyWidget extends StatelessWidget {
+  // Clean and focused!
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>2. Variable Naming Issues</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="comparison">
+                            <div class="before">
+                                <h4>❌ Problem:</h4>
+                                <pre><code>class myWidget extends StatelessWidget {  // Should be PascalCase
+  final String my_text = 'hello';        // Should be camelCase
+}</code></pre>
+                            </div>
+                            <div class="after">
+                                <h4>✅ Solution:</h4>
+                                <pre><code>class MyWidget extends StatelessWidget {   // PascalCase for classes
+  final String myText = 'hello';          // camelCase for variables
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>3. Missing Const Keywords</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="comparison">
+                            <div class="before">
+                                <h4>❌ Problem:</h4>
+                                <pre><code>Widget build(BuildContext context) {
+  return Scaffold(
+    body: Center(
+      child: Text('Hello World'),  // Should be const
+    ),
+  );
+}</code></pre>
+                            </div>
+                            <div class="after">
+                                <h4>✅ Solution:</h4>
+                                <pre><code>Widget build(BuildContext context) {
+  return Scaffold(
+    body: Center(
+      child: const Text('Hello World'),  // Better performance!
+    ),
+  );
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>4. Null Safety Issues</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="comparison">
+                            <div class="before">
+                                <h4>❌ Problem:</h4>
+                                <pre><code>String? name;
+int length = name.length;  // Dangerous! name might be null</code></pre>
+                            </div>
+                            <div class="after">
+                                <h4>✅ Solution:</h4>
+                                <pre><code>String? name;
+int length = name?.length ?? 0;  // Safe null handling
+// or
+int length = name!.length;       // If you're absolutely sure it's not null</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="customizing-analysis-rules" class="section">
+                <h2><span class="emoji-header">🎛️</span>Customizing Analysis Rules</h2>
+
+                <h3><span class="emoji-header">⚙️</span>Making Rules Stricter or More Relaxed</h3>
+                <p>Sometimes you might want to adjust the rules for your specific project:</p>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Disable a Rule (When You Don't Want It)</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="code-header">analysis_options.yaml</div>
+                        <pre class="code-block"><code>linter:
+  rules:
+    prefer_single_quotes: false  # Allow both single and double quotes
+    avoid_print: false           # Allow print statements for debugging</code></pre>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Enable Additional Rules (For Even Better Code)</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="code-header">analysis_options.yaml</div>
+                        <pre class="code-block"><code>linter:
+  rules:
+    # Documentation requirements
+    public_member_api_docs: true     # Require docs for public APIs
+    
+    # Extra strictness
+    require_trailing_commas: true    # Force trailing commas
+    sort_constructors_first: true    # Constructors at top of class
+    
+    # Performance focused
+    use_key_in_widget_constructors: true  # Better widget rebuilds</code></pre>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Make Warnings Into Errors (For Team Consistency)</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="code-header">analysis_options.yaml</div>
+                        <pre class="code-block"><code>analyzer:
+  errors:
+    prefer_single_quotes: error      # Must use single quotes
+    unused_import: error             # Must remove unused imports
+    prefer_const_constructors: error # Must use const where possible</code></pre>
+                    </div>
+                </div>
+
+                <h3><span class="emoji-header">🔧</span>Example Custom Configuration for Different Project Types</h3>
+
+                <div class="comparison">
+                    <div class="before" style="border-left-color: var(--info-color);">
+                        <h4 style="background: var(--info-color);">📚 For Learning Projects (More Forgiving):</h4>
+                        <pre><code>include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Allow more flexibility while learning
+    avoid_print: false
+    prefer_single_quotes: false
+    public_member_api_docs: false</code></pre>
+                    </div>
+                    <div class="after" style="border-left-color: var(--warning-color);">
+                        <h4 style="background: var(--warning-color);">🏭 For Production Apps (Very Strict):</h4>
+                        <pre><code>include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  errors:
+    # Make style violations into errors
+    prefer_single_quotes: error
+    prefer_const_constructors: error
+    unused_import: error
+
+linter:
+  rules:
+    # Maximum strictness
+    public_member_api_docs: true
+    require_trailing_commas: true
+    sort_constructors_first: true
+    use_key_in_widget_constructors: true</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ide-integration" class="section">
+                <h2><span class="emoji-header">🎨</span>IDE Integration</h2>
+
+                <h3><span class="emoji-header">💻</span>Visual Studio Code Setup</h3>
+                <ol>
+                    <li><strong>Install the Dart Extension</strong>
+                        <ul>
+                            <li>Search for "Dart" in extensions</li>
+                            <li>It automatically shows analyzer results</li>
+                        </ul>
+                    </li>
+                    <li><strong>Settings for Better Experience</strong>
+                        <div class="code-header">settings.json</div>
+                        <pre class="code-block"><code>{
+  "dart.lineLength": 80,
+  "dart.previewFlutterUiGuides": true,
+  "dart.showIgnoreQuickFixes": true
+}</code></pre>
+                    </li>
+                    <li><strong>What You'll See:</strong>
+                        <ul>
+                            <li>🔴 Red squigglies for errors</li>
+                            <li>🟡 Yellow squigglies for warnings</li>
+                            <li>💡 Light bulb for quick fixes</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3><span class="emoji-header">🤖</span>Android Studio Setup</h3>
+                <ol>
+                    <li><strong>Built-in Integration</strong>
+                        <ul>
+                            <li>Analyzer runs automatically</li>
+                            <li>Shows issues in the "Problems" panel</li>
+                        </ul>
+                    </li>
+                    <li><strong>Useful Shortcuts:</strong>
+                        <ul>
+                            <li><code>Alt + Enter</code> - Show quick fixes</li>
+                            <li><code>Ctrl + Alt + L</code> - Format code</li>
+                            <li><code>Ctrl + Alt + O</code> - Optimize imports</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3><span class="emoji-header">🔧</span>Quick Fix Magic</h3>
+                <div class="highlight-box success">
+                    <p>Both IDEs offer "quick fixes" for many analyzer issues:</p>
+                    <p><strong>Example:</strong> If you see "prefer_const_constructors"</p>
+                    <ol>
+                        <li>Click the light bulb icon 💡</li>
+                        <li>Select "Add 'const' modifier"</li>
+                        <li>Issue fixed automatically! ✨</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="daily-workflow" class="section">
+                <h2><span class="emoji-header">📅</span>Daily Workflow</h2>
+
+                <h3><span class="emoji-header">🌅</span>Morning Routine (2 minutes)</h3>
+                <div class="command-box">
+# Check code health before starting work
+flutter analyze
+
+# If issues found, auto-fix what you can
+dart fix --apply
+
+# Check again to see what's left
+flutter analyze
+                    <button class="copy-btn" onclick="copyToClipboard('flutter analyze && dart fix --apply && flutter analyze')">Copy</button>
+                </div>
+
+                <h3><span class="emoji-header">💻</span>While Coding</h3>
+                <ul class="checklist">
+                    <li><strong>Watch for squiggly lines</strong> in your IDE</li>
+                    <li><strong>Fix issues as you go</strong> (easier than batching later)</li>
+                    <li><strong>Use quick fixes</strong> when available (💡 icon)</li>
+                </ul>
+
+                <h3><span class="emoji-header">🌙</span>Before Committing Code</h3>
+                <div class="command-box">
+# Final check before sharing your code
+flutter analyze
+
+# Format your code nicely
+dart format lib/ test/
+
+# Auto-fix anything possible
+dart fix --apply
+
+# One last check
+flutter analyze
+                    <button class="copy-btn" onclick="copyToClipboard('flutter analyze && dart format lib/ test/ && dart fix --apply && flutter analyze')">Copy</button>
+                </div>
+
+                <h3><span class="emoji-header">🔄</span>Continuous Integration Setup</h3>
+                <p>Add this to your CI/CD pipeline:</p>
+                <div class="code-header">.github/workflows/ci.yml</div>
+                <pre class="code-block"><code>- name: Analyze code
+  run: flutter analyze --fatal-infos
+  
+# The --fatal-infos flag makes the build fail even for style issues</code></pre>
+            </section>
+
+            <section id="advanced-tips" class="section">
+                <h2><span class="emoji-header">🚀</span>Advanced Tips</h2>
+
+                <h3><span class="emoji-header">⚡</span>Power User Commands</h3>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Analyze Specific Files</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="command-box">
+# Check just one file
+flutter analyze lib/main.dart
+
+# Check specific directory
+flutter analyze lib/widgets/
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Verbose Output for Debugging</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="command-box">
+# Get detailed analysis information
+flutter analyze --verbose
+
+# Show all analysis options
+flutter analyze --help
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Machine-Readable Output</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="command-box">
+# JSON output for scripts/tools
+flutter analyze --machine
+                        </div>
+                    </div>
+                </div>
+
+                <h3><span class="emoji-header">🎯</span>Performance Analysis</h3>
+                <div class="highlight-box info">
+                    <h4>Common Performance Anti-Patterns the Analyzer Catches:</h4>
+                    <ul>
+                        <li><strong>Building widgets in build methods unnecessarily</strong></li>
+                        <li><strong>Not using const constructors</strong></li>
+                        <li><strong>Inefficient list operations</strong></li>
+                        <li><strong>Missing keys in widget constructors</strong></li>
+                    </ul>
+                </div>
+
+                <h3><span class="emoji-header">🛠️</span>Analyzer Configuration for Teams</h3>
+                <div class="comparison">
+                    <div class="before" style="border-left-color: var(--info-color);">
+                        <h4 style="background: var(--info-color);">📝 Team Shared Configuration</h4>
+                        <pre><code># analysis_options.yaml (shared via git)
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"      # Generated files
+    - "**/*.freezed.dart" # Generated files
+    - build/**           # Build artifacts
+  
+  strong-mode:
+    implicit-casts: false      # Catch potential type issues
+    implicit-dynamic: false    # Be explicit about types
+
+linter:
+  rules:
+    # Team agreed-upon rules
+    prefer_single_quotes: true
+    require_trailing_commas: true
+    sort_constructors_first: true</code></pre>
+                    </div>
+                    <div class="after" style="border-left-color: var(--success-color);">
+                        <h4 style="background: var(--success-color);">🎨 IDE Team Settings</h4>
+                        <pre><code>// .vscode/settings.json (shared via git)
+{
+  "dart.lineLength": 80,
+  "editor.rulers": [80],
+  "dart.previewFlutterUiGuides": true,
+  "editor.formatOnSave": true
+}</code></pre>
+                    </div>
+                </div>
+
+                <h3><span class="emoji-header">🆘</span>Troubleshooting Common Problems</h3>
+                
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Problem: "Analysis server is already running"</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="command-box">
+# Kill the analysis server and restart
+dart --kill-dart-dev-service-daemon
+# Then run flutter analyze again
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Problem: "Analyzer takes too long"</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="command-box">
+# Check if you're analyzing too many files
+flutter analyze --verbose | grep "Analyzing"
+                        </div>
+                        <p>Add exclusions to analysis_options.yaml:</p>
+                        <pre><code>analyzer:
+  exclude:
+    - build/**
+    - .dart_tool/**
+    - "**/*.g.dart"</code></pre>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Problem: "Too many false positives"</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <pre><code># Tune your rules in analysis_options.yaml
+linter:
+  rules:
+    # Disable rules that don't fit your project
+    prefer_single_quotes: false
+    public_member_api_docs: false</code></pre>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <strong>Problem: "IDE not showing analyzer results"</strong>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ol>
+                            <li><strong>VS Code:</strong> Restart the Dart Language Server (Ctrl+Shift+P → "Dart: Restart Language Server")</li>
+                            <li><strong>Android Studio:</strong> File → Invalidate Caches and Restart</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section id="success-metrics" class="section">
+                <h2><span class="emoji-header">🎯</span>Success Metrics</h2>
+                <p>You'll know you're succeeding with Flutter Analyze when:</p>
+                <ul class="checklist">
+                    <li><strong>Zero analyzer issues</strong> in your main branch</li>
+                    <li><strong>Consistent code style</strong> across your team</li>
+                    <li><strong>Faster code reviews</strong> (less style discussion)</li>
+                    <li><strong>Fewer runtime bugs</strong> (caught during development)</li>
+                    <li><strong>IDE integration</strong> working smoothly with real-time feedback</li>
+                </ul>
+            </section>
+
+            <section id="next-steps" class="section">
+                <h2><span class="emoji-header">🚀</span>Next Steps</h2>
+
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <h4>📚 Beginner (Week 1)</h4>
+                        <ul>
+                            <li>□ Run <code>flutter analyze</code> daily</li>
+                            <li>□ Fix all issues in your current project</li>
+                            <li>□ Learn to use IDE quick fixes</li>
+                            <li>□ Understand the top 10 most common rules</li>
+                        </ul>
+                    </div>
+                    <div class="benefit-card">
+                        <h4>🔧 Intermediate (Week 2-4)</h4>
+                        <ul>
+                            <li>□ Customize analysis_options.yaml for your project</li>
+                            <li>□ Set up CI/CD to enforce analysis</li>
+                            <li>□ Help teammates understand analyzer messages</li>
+                            <li>□ Learn to disable specific rules when needed</li>
+                        </ul>
+                    </div>
+                    <div class="benefit-card">
+                        <h4>🎓 Advanced (Month 2+)</h4>
+                        <ul>
+                            <li>□ Create custom lint rules for your team</li>
+                            <li>□ Optimize analyzer performance for large projects</li>
+                            <li>□ Integrate with code review tools</li>
+                            <li>□ Mentor others on static analysis best practices</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="congratulations" class="section">
+                <h2><span class="emoji-header">🎉</span>Congratulations!</h2>
+                <p>You now understand Flutter Analyze from the ground up:</p>
+                <ul class="checklist">
+                    <li><strong>What it does</strong> and why it's important</li>
+                    <li><strong>How to run it</strong> and interpret results</li>
+                    <li><strong>How to fix</strong> common issues</li>
+                    <li><strong>How to customize</strong> rules for your needs</li>
+                    <li><strong>How to integrate</strong> it into your daily workflow</li>
+                </ul>
+
+                <div class="highlight-box success">
+                    <p><strong>Remember:</strong> The analyzer is your coding partner, not your enemy. It helps you write better code by catching issues early and teaching you Dart/Flutter best practices.</p>
+                    <p><strong>Start small:</strong> Fix one analyzer issue per day, and you'll quickly develop good habits that make you a better Flutter developer.</p>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem; font-size: 1.2rem; color: var(--primary-color); font-style: italic;">
+                    <p>"Good code is not just code that works – it's code that's readable, maintainable, and follows best practices. Flutter Analyze helps you achieve all three!" 🎯</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="analyze-quick-reference.html" class="nav-link">📋 Quick Reference</a>
+        <a href="hands-on-analyze-exercise.html" class="nav-link">🎯 Practice Exercises</a>
+        <a href="analyze-README.html" class="nav-link">📖 Overview</a>
+    </div>
+
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // Progress bar functionality
+        window.addEventListener('scroll', function() {
+            const scrolled = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+
+            // Show/hide back to top button
+            const backToTop = document.getElementById('backToTop');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Back to top functionality
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Copy to clipboard functionality
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Show success feedback
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#4caf50';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Collapsible functionality
+        function toggleCollapsible(element) {
+            const collapsible = element.parentElement;
+            collapsible.classList.toggle('active');
+        }
+
+        // Add copy buttons to all command boxes
+        document.addEventListener('DOMContentLoaded', function() {
+            const commandBoxes = document.querySelectorAll('.command-box');
+            commandBoxes.forEach(box => {
+                if (!box.querySelector('.copy-btn')) {
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-btn';
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.onclick = () => {
+                        const code = box.textContent.replace('Copy', '').trim();
+                        copyToClipboard(code);
+                    };
+                    box.appendChild(copyBtn);
+                }
+            });
+        });
+
+        // Highlight current section in navigation
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.toc a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .toc a.active {
+            background: var(--primary-color);
+            color: white;
+            transform: translateX(8px);
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏋️ Flutter Analyze Hands-On Exercise</title>
+    <style>
+        :root {
+            --primary-color: #0175c2;
+            --secondary-color: #02569b;
+            --accent-color: #13b9fd;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            --info-color: #2196f3;
+            --background-color: #ffffff;
+            --surface-color: #f8f9fa;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --code-background: #f8f9fa;
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 35px,
+                rgba(255,255,255,0.1) 35px,
+                rgba(255,255,255,0.1) 70px
+            );
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-subtitle {
+            text-align: center;
+            font-size: 1.3rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 4px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .exercise-progress {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .exercise {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            border-top: 6px solid var(--accent-color);
+        }
+
+        .exercise-number {
+            position: absolute;
+            top: -15px;
+            left: 2rem;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.6rem;
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h4 {
+            color: var(--text-primary);
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.2rem;
+        }
+
+        .step-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .step-card {
+            background: var(--surface-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--info-color);
+            position: relative;
+        }
+
+        .step-card h4 {
+            color: var(--info-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .command-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            font-family: 'SF Mono', Monaco, monospace;
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: pre;
+            word-wrap: normal;
+            word-break: normal;
+            max-width: 100%;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) transparent;
+        }
+
+        .command-box::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .command-box::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        .command-box::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        .command-box::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        .command-box::before {
+            content: '$ ';
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .command-box:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .input-field {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            min-width: 150px;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .task-card {
+            background: linear-gradient(135deg, #fff3e0, #fef9c3);
+            border-left: 4px solid var(--warning-color);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .task-card::before {
+            content: "🎯";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            border-left: 4px solid var(--success-color);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .result-card::before {
+            content: "📊";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .code-container {
+            background: var(--code-background);
+            border-radius: 12px;
+            margin: 1rem 0;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .code-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        pre {
+            background: var(--code-background);
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 0;
+        }
+
+        pre code {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        code {
+            background: var(--code-background);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.9em;
+            color: var(--secondary-color);
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .checklist li {
+            margin: 0.7rem 0;
+            padding-left: 2.5rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .checklist li.completed::before {
+            content: '✅';
+            color: var(--success-color);
+        }
+
+        .checklist li:hover {
+            background: var(--surface-color);
+            border-radius: 4px;
+            padding: 0.5rem;
+            padding-left: 2.5rem;
+            margin-left: -0.5rem;
+        }
+
+        .severity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .severity-card {
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+
+        .severity-card.error {
+            background: linear-gradient(135deg, #ffebee, #ffecec);
+            border-left-color: var(--error-color);
+        }
+
+        .severity-card.warning {
+            background: linear-gradient(135deg, #fff3e0, #fef9c3);
+            border-left-color: var(--warning-color);
+        }
+
+        .severity-card.info {
+            background: linear-gradient(135deg, #e3f2fd, #e1f5fe);
+            border-left-color: var(--info-color);
+        }
+
+        .challenge-card {
+            background: linear-gradient(135deg, #f3e5f5, #e8eaf6);
+            border: 2px solid var(--secondary-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .challenge-card::before {
+            content: "🎯";
+            position: absolute;
+            top: -15px;
+            left: 2rem;
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            font-size: 1.2rem;
+        }
+
+        .reflection-area {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .reflection-question {
+            margin: 1.5rem 0;
+        }
+
+        .reflection-question label {
+            display: block;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .reflection-answer {
+            width: 100%;
+            min-height: 80px;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .reflection-answer:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .completion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .completion-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--success-color);
+        }
+
+        .completion-section h4 {
+            color: var(--success-color);
+            margin-bottom: 1rem;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+            font-size: 1.2rem;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .floating-progress {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            padding: 1rem;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            min-width: 200px;
+        }
+
+        .floating-progress.visible {
+            opacity: 1;
+        }
+
+        .floating-progress h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.25rem 0;
+            font-size: 0.8rem;
+        }
+
+        .progress-item.completed {
+            color: var(--success-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem 0.5rem;
+                margin: 0;
+            }
+
+            .command-box {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+                margin: 0.8rem 0;
+            }
+
+            .nav-floating {
+                width: calc(100% - 1rem);
+                left: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.5rem 0.25rem;
+            }
+
+            .command-box {
+                font-size: 0.8rem;
+                padding: 0.6rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="exercise-progress" id="exerciseProgress">Exercise 1 of 10</div>
+    </div>
+    
+    <header>
+        <div class="container">
+            <h1>🏋️ Flutter Analyze Hands-On Exercise</h1>
+            <p class="header-subtitle">Learn Flutter Analyze through practice with your BDD Gherkin project</p>
+        </div>
+    </header>
+
+    <div class="floating-progress" id="floatingProgress">
+        <h4>Exercise Progress</h4>
+        <div class="progress-item" data-exercise="1">
+            <span class="progress-icon">☐</span>
+            <span>Exercise 1: First Analysis</span>
+        </div>
+        <div class="progress-item" data-exercise="2">
+            <span class="progress-icon">☐</span>
+            <span>Exercise 2: Breaking Things</span>
+        </div>
+        <div class="progress-item" data-exercise="3">
+            <span class="progress-icon">☐</span>
+            <span>Exercise 3: Fixing Issues</span>
+        </div>
+        <div class="progress-item" data-exercise="4">
+            <span class="progress-icon">☐</span>
+            <span>Exercise 4: Auto-Fix Magic</span>
+        </div>
+        <div class="progress-item" data-exercise="5">
+            <span class="progress-icon">☐</span>
+            <span>Exercise 5: Severity Levels</span>
+        </div>
+        <div class="progress-item" data-exercise="6">
+            <span class="progress-icon">☐</span>
+            <span>Exercise 6: Customizing Rules</span>
+        </div>
+        <div class="progress-item" data-exercise="7">
+            <span class="progress-icon">☐</span>
+            <span>Exercise 7: IDE Integration</span>
+        </div>
+        <div class="progress-item" data-exercise="8">
+            <span class="progress-icon">☐</span>
+            <span>Exercise 8: Real-World</span>
+        </div>
+        <div class="progress-item" data-exercise="9">
+            <span class="progress-icon">☐</span>
+            <span>Exercise 9: Team Workflow</span>
+        </div>
+        <div class="progress-item" data-exercise="10">
+            <span class="progress-icon">☐</span>
+            <span>Exercise 10: Advanced</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <div class="exercise fade-in" data-exercise="1">
+                <div class="exercise-number">Exercise 1</div>
+                <h2>🚀 Your First Analysis Run</h2>
+                
+                <div class="step-container">
+                    <div class="step-card">
+                        <h4>Step 1: Check Your Starting Point</h4>
+                        <div class="command-box">
+# Open terminal in your project folder
+cd /home/io/StudioProjects/bdd_gherkin
+
+# Run your first analysis
+flutter analyze
+                            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>📝 Write down your results:</h4>
+                            <p>Number of issues found: <input type="text" class="input-field" placeholder="____"></p>
+                            <p>Most common issue type: <input type="text" class="input-field" placeholder="________________"></p>
+                            <p>Severity levels seen: <input type="text" class="input-field" placeholder="________________"></p>
+                        </div>
+                        
+                        <div class="task-card">
+                            <p><strong>🎉 Good news:</strong> Your current result should be "No issues found!" because we just fixed everything!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card">
+                        <h4>Step 2: Understand Your Configuration</h4>
+                        <div class="command-box">
+# Look at your analysis rules
+cat analysis_options.yaml | head -20
+                            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>🔍 Exploration tasks:</h4>
+                            <p>1. How many rule categories do you see? <input type="text" class="input-field" placeholder="____"></p>
+                            <p>2. Which rules are marked as "error" level? <input type="text" class="input-field" placeholder="________________"></p>
+                            <p>3. What does <code>include: package:flutter_lints/flutter.yaml</code> do? <input type="text" class="input-field" placeholder="________________"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise fade-in" data-exercise="2">
+                <div class="exercise-number">Exercise 2</div>
+                <h2>💥 Intentionally Breaking Things (Learning from Mistakes)</h2>
+                
+                <div class="step-card">
+                    <h4>Step 3: Create Analyzer Issues</h4>
+                    <p>Let's intentionally introduce some issues to learn how to fix them:</p>
+                    
+                    <div class="task-card">
+                        <h4>Create a test file with problems:</h4>
+                        <div class="code-container">
+                            <div class="code-header">Create lib/bad_example.dart with intentional issues</div>
+                            <pre><code>cat > lib/bad_example.dart << 'EOF'
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;  // Unused import
+
+class myBadWidget extends StatelessWidget {  // Bad naming
+  myBadWidget({Key? key}) : super(key: key);  // Constructor naming
+  
+  Widget build(BuildContext context) {
+    String name;  // Uninitialized variable
+    return Scaffold(
+      appBar: AppBar(title: Text("Bad Example")),  // Should use single quotes
+      body: Center(
+        child: Column(
+          children: [
+            Text("Hello"),          // Should be const
+            Text(name.toString()),  // Using uninitialized variable
+            RaisedButton(           // Deprecated widget
+              onPressed: () {},
+              child: Text("Click me"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+EOF</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <h4>Step 4: Run Analysis and Count Issues</h4>
+                    <div class="command-box">
+flutter analyze
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h4>📊 Count the issues:</h4>
+                        <div class="severity-grid">
+                            <div class="severity-card error">
+                                <h4>🔴 Errors: <input type="text" class="input-field" placeholder="____"></h4>
+                            </div>
+                            <div class="severity-card warning">
+                                <h4>🟡 Warnings: <input type="text" class="input-field" placeholder="____"></h4>
+                            </div>
+                            <div class="severity-card info">
+                                <h4>🔵 Info/Lints: <input type="text" class="input-field" placeholder="____"></h4>
+                            </div>
+                        </div>
+                        <p>Total issues: <input type="text" class="input-field" placeholder="____"></p>
+                        <p><strong>🔍 Most common issue type:</strong> <input type="text" class="input-field" placeholder="________________"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise fade-in" data-exercise="3">
+                <div class="exercise-number">Exercise 3</div>
+                <h2>🛠️ Fixing Issues One by One</h2>
+                
+                <div class="step-container">
+                    <div class="step-card">
+                        <h4>Step 5: Fix Import Issues</h4>
+                        <p>Look at the analyzer output and find the unused import issue.</p>
+                        
+                        <div class="task-card">
+                            <h4>🎯 Your task:</h4>
+                            <p>Remove the unused import from <code>lib/bad_example.dart</code></p>
+                            <p><strong>Before fixing, predict:</strong> How many issues will this fix? <input type="text" class="input-field" placeholder="____"></p>
+                        </div>
+                        
+                        <div class="command-box">
+flutter analyze
+                            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                        
+                        <div class="result-card">
+                            <p><strong>Actual result:</strong> Fixed <input type="text" class="input-field" placeholder="____"> issues</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card">
+                        <h4>Step 6: Fix Naming Issues</h4>
+                        <p>Find the class naming issue (should be PascalCase).</p>
+                        
+                        <div class="task-card">
+                            <h4>🎯 Your task:</h4>
+                            <p>Fix the class name and constructor name</p>
+                            <p><strong>Questions to think about:</strong></p>
+                            <p>1. What should <code>myBadWidget</code> become? <input type="text" class="input-field" placeholder="________________"></p>
+                            <p>2. What should the constructor name become? <input type="text" class="input-field" placeholder="________________"></p>
+                        </div>
+                        
+                        <div class="command-box">
+flutter analyze
+                            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-card">
+                        <h4>Step 7: Fix Quote Consistency</h4>
+                        <div class="task-card">
+                            <h4>🎯 Your task:</h4>
+                            <p>Change double quotes to single quotes where suggested</p>
+                        </div>
+                        
+                        <div class="command-box">
+# Find all double quotes in your file
+grep '"' lib/bad_example.dart
+                            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card">
+                        <h4>Step 8: Fix Performance Issues</h4>
+                        <div class="task-card">
+                            <h4>🎯 Your task:</h4>
+                            <p>Add <code>const</code> keywords where the analyzer suggests</p>
+                            <p><strong>Learning question:</strong> Why does <code>const</code> improve performance?</p>
+                            <textarea class="reflection-answer" placeholder="Your answer:"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <h4>Step 9: Fix Deprecated Widgets</h4>
+                    <div class="task-card">
+                        <h4>🎯 Your task:</h4>
+                        <p>Replace <code>RaisedButton</code> with <code>ElevatedButton</code></p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">Before and after comparison</div>
+                            <pre><code>// Before:
+RaisedButton(onPressed: () {}, child: Text('Click me'))
+
+// After:
+// Your solution here</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise fade-in" data-exercise="4">
+                <div class="exercise-number">Exercise 4</div>
+                <h2>⚡ Using Auto-Fix Magic</h2>
+                
+                <div class="step-container">
+                    <div class="step-card">
+                        <h4>Step 10: Let Dart Fix Things Automatically</h4>
+                        <div class="command-box">
+# Try the auto-fix command
+dart fix --apply
+                            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>📈 Results:</h4>
+                            <p>Issues before auto-fix: <input type="text" class="input-field" placeholder="____"></p>
+                            <p>Issues after auto-fix: <input type="text" class="input-field" placeholder="____"></p>
+                            <p>Issues fixed automatically: <input type="text" class="input-field" placeholder="____"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card">
+                        <h4>Step 11: What Can't Be Auto-Fixed?</h4>
+                        <div class="command-box">
+flutter analyze
+                            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>🤔 Remaining issues:</h4>
+                            <p>1. <input type="text" class="input-field" placeholder="________________________________"></p>
+                            <p>2. <input type="text" class="input-field" placeholder="________________________________"></p>
+                            <p>3. <input type="text" class="input-field" placeholder="________________________________"></p>
+                            
+                            <p><strong>💡 Why can't these be auto-fixed?</strong></p>
+                            <textarea class="reflection-answer" placeholder="Your analysis:"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise fade-in" data-exercise="5">
+                <div class="exercise-number">Exercise 5</div>
+                <h2>🚦 Understanding Severity Levels</h2>
+                
+                <div class="step-card">
+                    <h4>Step 12: Create Different Severity Examples</h4>
+                    <p>Add these to your <code>lib/bad_example.dart</code>:</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">Add these examples to see different severities</div>
+                        <pre><code>// Add at the top of the file
+import 'dart:io';  // Will be unused - creates INFO
+
+// Add inside the build method
+void problematicMethod() {
+  var x;  // Uninitialized - creates WARNING
+  print(x.toString());  // Using uninitialized - creates ERROR
+}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <h4>Step 13: Analyze Severity Impact</h4>
+                    <div class="command-box">
+flutter analyze
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h4>🚦 Categorize each issue by severity:</h4>
+                        
+                        <div class="severity-grid">
+                            <div class="severity-card error">
+                                <h4>🔴 Errors (code won't work):</h4>
+                                <input type="text" class="input-field" placeholder="________________________________" style="width: 100%; margin: 0.5rem 0;">
+                                <input type="text" class="input-field" placeholder="________________________________" style="width: 100%; margin: 0.5rem 0;">
+                            </div>
+                            
+                            <div class="severity-card warning">
+                                <h4>🟡 Warnings (might cause problems):</h4>
+                                <input type="text" class="input-field" placeholder="________________________________" style="width: 100%; margin: 0.5rem 0;">
+                                <input type="text" class="input-field" placeholder="________________________________" style="width: 100%; margin: 0.5rem 0;">
+                            </div>
+                            
+                            <div class="severity-card info">
+                                <h4>🔵 Info/Lints (style issues):</h4>
+                                <input type="text" class="input-field" placeholder="________________________________" style="width: 100%; margin: 0.5rem 0;">
+                                <input type="text" class="input-field" placeholder="________________________________" style="width: 100%; margin: 0.5rem 0;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="challenge-card fade-in">
+                <h2>🎯 Challenge Mode</h2>
+                
+                <div class="step-container">
+                    <div class="challenge-card">
+                        <h3>Challenge 1: Rule Detective</h3>
+                        <ol>
+                            <li>Intentionally violate 5 different analyzer rules</li>
+                            <li>Document which rules you broke</li>
+                            <li>Fix them using only IDE quick fixes</li>
+                            <li>Time how long it takes</li>
+                        </ol>
+                        
+                        <div class="result-card">
+                            <h4>📝 Results:</h4>
+                            <p>Rules broken: <input type="text" class="input-field" placeholder="________________________________" style="width: 80%;"></p>
+                            <p>Time to fix: <input type="text" class="input-field" placeholder="____"> minutes</p>
+                            <p>Success rate with quick fixes: <input type="text" class="input-field" placeholder="____">%</p>
+                        </div>
+                    </div>
+                    
+                    <div class="challenge-card">
+                        <h3>Challenge 2: Configuration Master</h3>
+                        <ol>
+                            <li>Find a rule you disagree with</li>
+                            <li>Research why the rule exists</li>
+                            <li>Decide whether to disable it or adapt your code</li>
+                            <li>Document your reasoning</li>
+                        </ol>
+                        
+                        <div class="result-card">
+                            <h4>📚 Analysis:</h4>
+                            <p>Rule chosen: <input type="text" class="input-field" placeholder="________________________________" style="width: 80%;"></p>
+                            <p>Why it exists: <input type="text" class="input-field" placeholder="________________________________" style="width: 80%;"></p>
+                            <p>Your decision: <input type="text" class="input-field" placeholder="________________________________" style="width: 80%;"></p>
+                            <p>Reasoning: <input type="text" class="input-field" placeholder="________________________________" style="width: 80%;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-area fade-in">
+                <h2>📝 Reflection Questions</h2>
+                <p>After completing the exercises:</p>
+                
+                <div class="reflection-question">
+                    <label for="surprise">1. What surprised you most about Flutter Analyze?</label>
+                    <textarea id="surprise" class="reflection-answer" placeholder="Your thoughts..."></textarea>
+                </div>
+                
+                <div class="reflection-question">
+                    <label for="dangerous">2. Which type of issue do you think is most dangerous?</label>
+                    <textarea id="dangerous" class="reflection-answer" placeholder="Your analysis..."></textarea>
+                </div>
+                
+                <div class="reflection-question">
+                    <label for="workflow">3. How will you use Flutter Analyze in your daily workflow?</label>
+                    <textarea id="workflow" class="reflection-answer" placeholder="Your plan..."></textarea>
+                </div>
+                
+                <div class="reflection-question">
+                    <label for="team-benefit">4. What's the biggest benefit for team development?</label>
+                    <textarea id="team-benefit" class="reflection-answer" placeholder="Your insights..."></textarea>
+                </div>
+                
+                <div class="reflection-question">
+                    <label for="helpful-rule">5. Which rule do you find most/least helpful and why?</label>
+                    <textarea id="helpful-rule" class="reflection-answer" placeholder="Your evaluation..."></textarea>
+                </div>
+            </div>
+
+            <div class="exercise fade-in">
+                <h2>🏆 Completion Checklist</h2>
+                <p>Mark off each item as you complete it:</p>
+                
+                <div class="completion-grid">
+                    <div class="completion-section">
+                        <h4>Understanding:</h4>
+                        <ul class="checklist">
+                            <li onclick="toggleComplete(this)">I understand what Flutter Analyze does</li>
+                            <li onclick="toggleComplete(this)">I can read analyzer output messages</li>
+                            <li onclick="toggleComplete(this)">I know the difference between errors, warnings, and lints</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="completion-section">
+                        <h4>Practical Skills:</h4>
+                        <ul class="checklist">
+                            <li onclick="toggleComplete(this)">I can run analysis from command line and IDE</li>
+                            <li onclick="toggleComplete(this)">I can fix common analyzer issues</li>
+                            <li onclick="toggleComplete(this)">I can use auto-fix and quick-fix features</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="completion-section">
+                        <h4>Configuration:</h4>
+                        <ul class="checklist">
+                            <li onclick="toggleComplete(this)">I understand analysis_options.yaml structure</li>
+                            <li onclick="toggleComplete(this)">I can enable/disable specific rules</li>
+                            <li onclick="toggleComplete(this)">I can set different severity levels</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="completion-section">
+                        <h4>Workflow:</h4>
+                        <ul class="checklist">
+                            <li onclick="toggleComplete(this)">I know how to integrate analysis into daily coding</li>
+                            <li onclick="toggleComplete(this)">I can set up pre-commit analysis checks</li>
+                            <li onclick="toggleComplete(this)">I understand team workflow benefits</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="completion-section">
+                        <h4>Advanced:</h4>
+                        <ul class="checklist">
+                            <li onclick="toggleComplete(this)">I can analyze specific files or directories</li>
+                            <li onclick="toggleComplete(this)">I understand when to ignore rules vs fix code</li>
+                            <li onclick="toggleComplete(this)">I can help teammates with analyzer issues</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card fade-in">
+                <h2>🎉 Congratulations!</h2>
+                <p>You've completed the hands-on Flutter Analyze exercise! You now have practical experience with:</p>
+                
+                <ul class="checklist">
+                    <li class="completed">Running analysis in multiple ways</li>
+                    <li class="completed">Understanding and fixing different types of issues</li>
+                    <li class="completed">Using IDE integration and quick fixes</li>
+                    <li class="completed">Customizing rules for different needs</li>
+                    <li class="completed">Setting up team workflows</li>
+                    <li class="completed">Debugging complex analysis scenarios</li>
+                </ul>
+
+                <div class="task-card">
+                    <p><strong>Your homework:</strong> Use <code>flutter analyze</code> daily for the next week and try to maintain zero issues in your project. Notice how it changes your coding habits!</p>
+                    
+                    <p><strong>Remember:</strong> The analyzer is a teacher, not a critic! Every issue it finds is a learning opportunity to write better, safer, more maintainable code.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // Progress tracking
+        let completedExercises = 0;
+        const totalExercises = 10;
+
+        // Progress bar functionality
+        window.addEventListener('scroll', function() {
+            const scrolled = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+
+            // Show/hide back to top button and floating progress
+            const backToTop = document.getElementById('backToTop');
+            const floatingProgress = document.getElementById('floatingProgress');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+                floatingProgress.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+                floatingProgress.classList.remove('visible');
+            }
+
+            // Update current exercise in progress bar
+            updateCurrentExercise();
+        });
+
+        function updateCurrentExercise() {
+            const exercises = document.querySelectorAll('.exercise');
+            const progressText = document.getElementById('exerciseProgress');
+            
+            for (let i = 0; i < exercises.length; i++) {
+                const rect = exercises[i].getBoundingClientRect();
+                if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                    const exerciseNum = exercises[i].getAttribute('data-exercise') || (i + 1);
+                    progressText.textContent = `Exercise ${exerciseNum} of ${totalExercises}`;
+                    break;
+                }
+            }
+        }
+
+        // Back to top functionality
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Copy to clipboard functionality
+        function copyToClipboard(button) {
+            const commandBox = button.closest('.command-box');
+            const text = commandBox.textContent.replace('Copy', '').replace('$ ', '').trim();
+            
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#4caf50';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Toggle completion for checklist items
+        function toggleComplete(item) {
+            item.classList.toggle('completed');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const completed = document.querySelectorAll('.checklist li.completed').length;
+            const total = document.querySelectorAll('.checklist li').length;
+            
+            // Update floating progress items
+            const progressItems = document.querySelectorAll('.progress-item');
+            progressItems.forEach((item, index) => {
+                if (index < Math.floor((completed / total) * totalExercises)) {
+                    item.classList.add('completed');
+                    item.querySelector('.progress-icon').textContent = '✅';
+                }
+            });
+        }
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections for animations
+        document.querySelectorAll('.fade-in').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Auto-save form inputs to localStorage
+        function saveInputs() {
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                if (input.id || input.placeholder) {
+                    const key = input.id || input.placeholder;
+                    localStorage.setItem(`flutter-exercise-${key}`, input.value);
+                }
+            });
+        }
+
+        function loadInputs() {
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                if (input.id || input.placeholder) {
+                    const key = input.id || input.placeholder;
+                    const saved = localStorage.getItem(`flutter-exercise-${key}`);
+                    if (saved) {
+                        input.value = saved;
+                    }
+                }
+            });
+        }
+
+        // Auto-save on input change
+        document.addEventListener('input', saveInputs);
+
+        // Load saved inputs on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadInputs();
+            
+            // Add copy buttons to all command boxes
+            const commandBoxes = document.querySelectorAll('.command-box');
+            commandBoxes.forEach(box => {
+                if (!box.querySelector('.copy-btn')) {
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-btn';
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.onclick = () => copyToClipboard(copyBtn);
+                    box.appendChild(copyBtn);
+                }
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + S = Save progress
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveInputs();
+                alert('Progress saved!');
+            }
+            
+            // Ctrl + R = Reset all inputs
+            if (e.ctrlKey && e.key === 'r' && e.shiftKey) {
+                e.preventDefault();
+                if (confirm('Reset all inputs? This cannot be undone.')) {
+                    localStorage.clear();
+                    location.reload();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

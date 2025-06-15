@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Flutter Analyze Learning Materials</title>
+    <style>
+        :root {
+            --primary-color: #0175c2;
+            --secondary-color: #02569b;
+            --accent-color: #13b9fd;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            --info-color: #2196f3;
+            --background-color: #ffffff;
+            --surface-color: #f8f9fa;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --code-background: #f8f9fa;
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            overflow-x: auto;
+            min-width: 320px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            overflow-x: auto;
+            width: 100%;
+            min-width: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-subtitle {
+            text-align: center;
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: var(--accent-color);
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+
+        .navigation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .nav-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(19, 185, 253, 0.05) 100%);
+            pointer-events: none;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-top-color: var(--primary-color);
+        }
+
+        .nav-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-card .icon {
+            font-size: 1.8rem;
+        }
+
+        .nav-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-card .btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-card .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.6rem;
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h4 {
+            color: var(--text-primary);
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.2rem;
+        }
+
+        .learning-path {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .day-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--success-color);
+            transition: transform 0.3s ease;
+        }
+
+        .day-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .day-card h4 {
+            color: var(--success-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .analogy-box {
+            background: linear-gradient(135deg, #e3f2fd, #f0f8ff);
+            border-left: 4px solid var(--info-color);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .analogy-box::before {
+            content: "💡";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+        }
+
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .command-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'SF Mono', Monaco, monospace;
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: pre;
+            word-wrap: normal;
+            word-break: normal;
+            max-width: 100%;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) transparent;
+        }
+
+        .command-box::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .command-box::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        .command-box::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        .command-box::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        .command-box::before {
+            content: '$ ';
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .command-box:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .code-container {
+            background: var(--code-background);
+            border-radius: 12px;
+            margin: 1rem 0;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .code-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        pre {
+            background: var(--code-background);
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 0;
+        }
+
+        pre code {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        code {
+            background: var(--code-background);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.9em;
+            color: var(--secondary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: var(--surface-color);
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .checklist li {
+            margin: 0.7rem 0;
+            padding-left: 2.5rem;
+            position: relative;
+        }
+
+        .checklist li::before {
+            content: '✅';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .highlight-box {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+
+        .highlight-box.success {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            border-left-color: var(--success-color);
+        }
+
+        .highlight-box.warning {
+            background: linear-gradient(135deg, #fff3e0, #fef9c3);
+            border-left-color: var(--warning-color);
+        }
+
+        .highlight-box.info {
+            background: linear-gradient(135deg, #e3f2fd, #e1f5fe);
+            border-left-color: var(--info-color);
+        }
+
+        .highlight-box.error {
+            background: linear-gradient(135deg, #ffebee, #ffecec);
+            border-left-color: var(--error-color);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-top: 4px solid var(--success-color);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .metric-card .metric-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+            font-size: 1.2rem;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background: var(--surface-color);
+            padding: 3rem 0;
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .qa-section {
+            background: var(--surface-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .qa-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem 0.5rem;
+                margin: 0;
+            }
+
+            .command-box {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+                margin: 0.8rem 0;
+            }
+
+            .nav-floating {
+                width: calc(100% - 1rem);
+                left: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            section h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.5rem 0.25rem;
+            }
+
+            .command-box {
+                font-size: 0.8rem;
+                padding: 0.6rem;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .floating-nav {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            padding: 1rem;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-nav.visible {
+            opacity: 1;
+        }
+
+        .floating-nav a {
+            display: block;
+            padding: 0.5rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: 4px;
+            margin-bottom: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .floating-nav a:hover,
+        .floating-nav a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <header>
+        <div class="container">
+            <h1>📚 Flutter Analyze Learning Materials</h1>
+            <p class="header-subtitle">Your complete Flutter Analyze learning kit using the Feynman Technique</p>
+        </div>
+    </header>
+
+    <div class="floating-nav" id="floatingNav">
+        <a href="#getting-started">Getting Started</a>
+        <a href="#learning-path">Learning Path</a>
+        <a href="#concepts">Key Concepts</a>
+        <a href="#daily-usage">Daily Usage</a>
+        <a href="#troubleshooting">Troubleshooting</a>
+        <a href="#success">Success Metrics</a>
+    </div>
+
+    <div class="container">
+        <div class="navigation-grid">
+            <div class="nav-card">
+                <span class="icon">📖</span>
+                <h3>Documentation</h3>
+                <p>Comprehensive guides from basics to advanced techniques</p>
+                <a href="flutter-analyze-walkthrough.html" class="btn">Complete Walkthrough</a>
+                <a href="hands-on-analyze-exercise.html" class="btn">Hands-On Exercise</a>
+                <a href="analyze-quick-reference.html" class="btn">Quick Reference</a>
+            </div>
+            
+            <div class="nav-card">
+                <span class="icon">🛠️</span>
+                <h3>Interactive Tools</h3>
+                <p>Step-by-step guided learning with practical examples</p>
+                <a href="../scripts/analyze-tutorial.sh" class="btn">Interactive Tutorial</a>
+                <a href="../scripts/daily-analyze.sh" class="btn">Daily Analysis Script</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <section id="getting-started" class="section fade-in">
+                <h2>🚀 Getting Started</h2>
+                
+                <div class="learning-path">
+                    <div class="day-card">
+                        <h4>🎓 Complete Beginners</h4>
+                        <p>Start with the interactive tutorial:</p>
+                        <div class="command-box">
+./scripts/analyze-tutorial.sh
+                            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                        <p>This provides a guided 20-minute journey through Flutter Analyze with explanations and practical examples.</p>
+                    </div>
+                    
+                    <div class="day-card">
+                        <h4>🏃‍♂️ Hands-On Learners</h4>
+                        <p>Jump into practical exercises:</p>
+                        <div class="command-grid">
+                            <div class="command-box">
+# Read the exercise guide
+cat docs/hands-on-analyze-exercise.md
+                                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                            </div>
+                            <div class="command-box">
+# Run your first analysis
+flutter analyze
+                                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="day-card">
+                        <h4>⚡ Daily Reference</h4>
+                        <p>Use the quick reference for immediate help:</p>
+                        <div class="command-grid">
+                            <div class="command-box">
+# View commands and fixes
+cat docs/analyze-quick-reference.md
+                                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                            </div>
+                            <div class="command-box">
+# Or keep it open for reference
+xdg-open docs/analyze-quick-reference.md
+                                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="learning-path" class="section fade-in">
+                <h2>🎓 Learning Path</h2>
+                
+                <div class="learning-path">
+                    <div class="day-card">
+                        <h4>📅 Day 1: Foundation (20 minutes)</h4>
+                        <ul class="checklist">
+                            <li>Run <code>./scripts/analyze-tutorial.sh</code></li>
+                            <li>Understand what static analysis does</li>
+                            <li>Learn to read analyzer output</li>
+                            <li>Run your first <code>flutter analyze</code></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-card">
+                        <h4>📅 Day 2: Practice (30 minutes)</h4>
+                        <ul class="checklist">
+                            <li>Follow <code>docs/hands-on-analyze-exercise.md</code></li>
+                            <li>Intentionally create and fix issues</li>
+                            <li>Learn auto-fix with <code>dart fix --apply</code></li>
+                            <li>Practice IDE integration</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-card">
+                        <h4>📅 Day 3: Workflow (15 minutes)</h4>
+                        <ul class="checklist">
+                            <li>Set up daily analysis routine</li>
+                            <li>Customize <code>analysis_options.yaml</code></li>
+                            <li>Integrate with IDE and git workflow</li>
+                            <li>Use the quick reference guide</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-card">
+                        <h4>📅 Ongoing: Mastery</h4>
+                        <ul class="checklist">
+                            <li>Run analysis daily before coding</li>
+                            <li>Fix issues as they appear in IDE</li>
+                            <li>Help teammates understand benefits</li>
+                            <li>Continuously improve code quality</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="concepts" class="section fade-in">
+                <h2>🎯 Key Concepts (Feynman Style)</h2>
+                
+                <div class="analogy-box">
+                    <h3>What is Flutter Analyze?</h3>
+                    <p>Think of it like <strong>spell-check for code</strong>:</p>
+                    <ul class="checklist">
+                        <li><strong>🔤 Spell-check</strong> finds typos → <strong>Analyzer</strong> finds syntax errors</li>
+                        <li><strong>📝 Grammar-check</strong> suggests better writing → <strong>Analyzer</strong> suggests better code patterns</li>
+                        <li><strong>🎨 Style-check</strong> ensures consistency → <strong>Analyzer</strong> enforces code style</li>
+                        <li><strong>💡 Smart suggestions</strong> improve clarity → <strong>Analyzer</strong> recommends performance improvements</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box warning">
+                    <h3>Why Does It Matter?</h3>
+                    <p><strong>Real-world analogy</strong>: Imagine submitting a resume with spelling errors and poor formatting. Even if you're qualified, it creates a bad first impression.</p>
+                    
+                    <p>Similarly, code with analyzer issues:</p>
+                    <ul>
+                        <li><strong>🐛 May contain hidden bugs</strong> (like logic errors)</li>
+                        <li><strong>🤝 Is harder for teammates to read</strong> (inconsistent style)</li>
+                        <li><strong>⚡ Might perform poorly</strong> (missing optimizations)</li>
+                        <li><strong>😰 Creates technical debt</strong> (harder to maintain)</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box success">
+                    <h3>What's a Good Analysis Result?</h3>
+                    <ul class="checklist">
+                        <li><strong>🎯 Goal</strong>: Zero issues (<code>flutter analyze</code> shows "No issues found!")</li>
+                        <li><strong>🔴 Priority 1</strong>: Fix all errors (code won't compile)</li>
+                        <li><strong>🟡 Priority 2</strong>: Fix all warnings (potential runtime problems)</li>
+                        <li><strong>🔵 Priority 3</strong>: Fix info/lints (style and best practices)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="daily-usage" class="section fade-in">
+                <h2>🛠️ Daily Usage</h2>
+                
+                <h3>Essential Commands</h3>
+                <div class="command-grid">
+                    <div class="command-box">
+# Morning health check
+flutter analyze
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+                    <div class="command-box">
+# Auto-fix common issues
+dart fix --apply
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+                    <div class="command-box">
+# Format code nicely
+dart format lib/ test/
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+                    <div class="command-box">
+# Daily workflow script
+./scripts/daily-analyze.sh
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+                </div>
+
+                <h3>IDE Integration</h3>
+                <div class="learning-path">
+                    <div class="day-card">
+                        <h4>💻 VS Code</h4>
+                        <p>Install Dart extension → see squiggly lines → use light bulb fixes</p>
+                    </div>
+                    <div class="day-card">
+                        <h4>🤖 Android Studio</h4>
+                        <p>Built-in support → Problems panel → Alt+Enter for fixes</p>
+                    </div>
+                </div>
+
+                <h3>🎨 Understanding Analyzer Output</h3>
+                <div class="code-container">
+                    <div class="code-header">Reading the Format</div>
+                    <pre><code>info • Prefer single quotes • lib/main.dart:15:20 • prefer_single_quotes</code></pre>
+                </div>
+                <p><strong>Translation</strong>: "On line 15, column 20 of lib/main.dart, you should use single quotes instead of double quotes (style rule: prefer_single_quotes)"</p>
+
+                <h3>Visual Severity Guide</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>In IDE</th>
+                            <th>In Terminal</th>
+                            <th>Meaning</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #ffebee;">
+                            <td>🔴 Red squiggly</td>
+                            <td><code>error</code></td>
+                            <td>Won't compile</td>
+                            <td><strong>Fix now</strong></td>
+                        </tr>
+                        <tr style="background: #fff3e0;">
+                            <td>🟡 Yellow squiggly</td>
+                            <td><code>warning</code></td>
+                            <td>Might break at runtime</td>
+                            <td><strong>Fix soon</strong></td>
+                        </tr>
+                        <tr style="background: #e3f2fd;">
+                            <td>🔵 Blue squiggly</td>
+                            <td><code>info</code></td>
+                            <td>Style suggestion</td>
+                            <td><strong>Fix when convenient</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="troubleshooting" class="section fade-in">
+                <h2>🚨 Troubleshooting</h2>
+                
+                <div class="qa-section">
+                    <h4>"Analysis server not responding"</h4>
+                    <div class="command-box">
+dart --kill-dart-dev-service-daemon
+flutter analyze  # Try again
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="qa-section">
+                    <h4>"Too many issues"</h4>
+                    <p>Start with errors first:</p>
+                    <div class="command-grid">
+                        <div class="command-box">
+flutter analyze | grep "error"  # Focus on errors only
+                            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                        <div class="command-box">
+dart fix --apply                # Auto-fix what you can
+                            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="qa-section">
+                    <h4>"IDE not showing squiggly lines"</h4>
+                    <ul>
+                        <li><strong>VS Code</strong>: Ctrl+Shift+P → "Dart: Restart Language Server"</li>
+                        <li><strong>Android Studio</strong>: File → Invalidate Caches and Restart</li>
+                    </ul>
+                </div>
+
+                <h3>🆘 Quick Help</h3>
+                <div class="learning-path">
+                    <div class="qa-section">
+                        <h4>Q: "Should I fix all issues immediately?"</h4>
+                        <p><strong>A:</strong> Fix errors (🔴) immediately, warnings (🟡) within a day, info (🔵) when convenient.</p>
+                    </div>
+                    
+                    <div class="qa-section">
+                        <h4>Q: "Can I disable rules I don't like?"</h4>
+                        <p><strong>A:</strong> Yes, but understand why the rule exists first. Team consistency is usually more important than personal preference.</p>
+                    </div>
+                    
+                    <div class="qa-section">
+                        <h4>Q: "What if auto-fix breaks my code?"</h4>
+                        <p><strong>A:</strong> Auto-fix is very safe, but always commit before running it so you can revert if needed.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="success" class="section fade-in">
+                <h2>🎯 Success Metrics</h2>
+                
+                <div class="highlight-box success">
+                    <h3>You'll know you're succeeding when:</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-icon">✅</div>
+                            <h4>Clean Analysis</h4>
+                            <p><code>flutter analyze</code> consistently shows "No issues found!"</p>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">👁️</div>
+                            <h4>Automatic Detection</h4>
+                            <p>You catch style issues automatically while typing</p>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">🔍</div>
+                            <h4>Quality Focus</h4>
+                            <p>Code reviews focus on logic, not style</p>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">👥</div>
+                            <h4>Team Readability</h4>
+                            <p>New team members can easily read your code</p>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">😌</div>
+                            <h4>Confidence</h4>
+                            <p>You feel confident about code quality</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>🚀 Next Level</h3>
+                <div class="learning-path">
+                    <div class="day-card">
+                        <h4>Beginner → Intermediate</h4>
+                        <ul class="checklist">
+                            <li>Maintain zero analyzer issues for one week</li>
+                            <li>Customize rules for your project</li>
+                            <li>Help a teammate understand analyzer benefits</li>
+                            <li>Set up CI/CD analysis checks</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-card">
+                        <h4>Intermediate → Advanced</h4>
+                        <ul class="checklist">
+                            <li>Create custom lint rules for your team</li>
+                            <li>Optimize analysis performance for large projects</li>
+                            <li>Mentor others on static analysis</li>
+                            <li>Contribute to community analysis practices</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ready" class="section fade-in">
+                <h2>🎉 Ready to Start?</h2>
+                
+                <div class="navigation-grid">
+                    <div class="nav-card">
+                        <span class="icon">🎓</span>
+                        <h3>Complete Beginner</h3>
+                        <p>Start with guided interactive tutorial</p>
+                        <a href="../scripts/analyze-tutorial.sh" class="btn">Start Tutorial</a>
+                    </div>
+                    
+                    <div class="nav-card">
+                        <span class="icon">🏃‍♂️</span>
+                        <h3>Want Practice</h3>
+                        <p>Jump into hands-on exercises</p>
+                        <a href="hands-on-analyze-exercise.html" class="btn">Start Practicing</a>
+                    </div>
+                    
+                    <div class="nav-card">
+                        <span class="icon">⚡</span>
+                        <h3>Need Quick Help</h3>
+                        <p>Access daily reference guide</p>
+                        <a href="analyze-quick-reference.html" class="btn">Quick Reference</a>
+                    </div>
+                    
+                    <div class="nav-card">
+                        <span class="icon">💼</span>
+                        <h3>Daily User</h3>
+                        <p>Use automated workflow script</p>
+                        <a href="../scripts/daily-analyze.sh" class="btn">Daily Workflow</a>
+                    </div>
+                </div>
+
+                <div class="quote">
+                    "Good code is not just code that works – it's code that's readable, maintainable, and follows best practices. Flutter Analyze helps you achieve all three!"
+                    
+                    <h4>Key Principles:</h4>
+                    <ul class="checklist">
+                        <li><strong>🎯 Quality over speed</strong> - Taking time to fix issues saves time later</li>
+                        <li><strong>🤝 Team consistency</strong> - Everyone benefits from shared standards</li>
+                        <li><strong>📚 Learning mindset</strong> - Each issue is a chance to improve</li>
+                        <li><strong>🔄 Daily practice</strong> - Small, consistent improvements compound</li>
+                    </ul>
+                    
+                    <p><strong>Happy analyzing!</strong> 🔍✨</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p><em>The analyzer is your coding partner, helping you write better Flutter apps one issue at a time.</em></p>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // Progress bar functionality
+        window.addEventListener('scroll', function() {
+            const scrolled = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+
+            // Show/hide back to top button and floating nav
+            const backToTop = document.getElementById('backToTop');
+            const floatingNav = document.getElementById('floatingNav');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+                floatingNav.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+                floatingNav.classList.remove('visible');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Back to top functionality
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Copy to clipboard functionality
+        function copyToClipboard(button) {
+            const commandBox = button.closest('.command-box');
+            const text = commandBox.textContent.replace('Copy', '').replace('$ ', '').trim();
+            
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#4caf50';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections for animations
+        document.querySelectorAll('.fade-in').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Update floating navigation active state
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.floating-nav a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Add copy buttons to all command boxes
+        document.addEventListener('DOMContentLoaded', function() {
+            const commandBoxes = document.querySelectorAll('.command-box');
+            commandBoxes.forEach(box => {
+                if (!box.querySelector('.copy-btn')) {
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-btn';
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.onclick = () => copyToClipboard(copyBtn);
+                    box.appendChild(copyBtn);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

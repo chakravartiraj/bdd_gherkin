@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Flutter Coverage Learning Materials</title>
+    <style>
+        :root {
+            --flutter-blue: #0175C2;
+            --flutter-navy: #02539A;
+            --flutter-sky: #13B9FD;
+            --flutter-yellow: #FFC108;
+            --bg-primary: #0A0E27;
+            --bg-secondary: #1A1F3A;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0BEC5;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --info: #2196F3;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, var(--flutter-blue), var(--flutter-sky));
+            --gradient-secondary: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius);
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-floating {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-floating h3 {
+            color: var(--flutter-sky);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .nav-floating a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.3rem 0;
+            font-size: 0.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-floating a:hover,
+        .nav-floating a.active {
+            color: var(--flutter-sky);
+        }
+
+        .section {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(255,255,255,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section h2 {
+            color: var(--flutter-sky);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section h3 {
+            color: var(--flutter-yellow);
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.3rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            border-color: var(--flutter-sky);
+        }
+
+        .card h4 {
+            color: var(--flutter-sky);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .command-box {
+            background: var(--bg-primary);
+            border: 1px solid var(--flutter-blue);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: pre;
+            word-wrap: normal;
+            word-break: normal;
+            max-width: 100%;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--flutter-blue) transparent;
+        }
+
+        .command-box::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .command-box::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        .command-box::-webkit-scrollbar-thumb {
+            background: var(--flutter-blue);
+            border-radius: 4px;
+        }
+
+        .command-box::-webkit-scrollbar-thumb:hover {
+            background: var(--flutter-sky);
+        }
+
+        .command-box pre {
+            margin: 0;
+            color: var(--flutter-sky);
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: pre;
+            word-wrap: normal;
+            word-break: normal;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--flutter-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+            background: var(--flutter-navy);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
+
+        .learning-path {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .day-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border-left: 4px solid var(--flutter-blue);
+            transition: all 0.3s ease;
+        }
+
+        .day-card:hover {
+            border-left-color: var(--flutter-sky);
+            transform: translateX(5px);
+        }
+
+        .day-card h4 {
+            color: var(--flutter-yellow);
+            margin-bottom: 1rem;
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .checklist li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .checklist li:hover {
+            color: var(--flutter-sky);
+        }
+
+        .checklist input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 0.5rem;
+            accent-color: var(--flutter-blue);
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            border-color: var(--flutter-sky);
+            transform: scale(1.05);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--flutter-sky);
+            display: block;
+        }
+
+        .coverage-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .coverage-level {
+            text-align: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            font-weight: bold;
+        }
+
+        .coverage-low { background: linear-gradient(135deg, var(--error), #D32F2F); }
+        .coverage-medium { background: linear-gradient(135deg, var(--warning), #F57C00); }
+        .coverage-good { background: linear-gradient(135deg, var(--success), #388E3C); }
+        .coverage-excellent { background: linear-gradient(135deg, var(--flutter-blue), var(--flutter-sky)); }
+
+        .alert {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            border: 1px solid;
+        }
+
+        .alert-success { background: rgba(76, 175, 80, 0.1); border-color: var(--success); }
+        .alert-warning { background: rgba(255, 152, 0, 0.1); border-color: var(--warning); }
+        .alert-error { background: rgba(244, 67, 54, 0.1); border-color: var(--error); }
+        .alert-info { background: rgba(33, 150, 243, 0.1); border-color: var(--info); }
+
+        .adventure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .adventure-card {
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .adventure-card:hover {
+            transform: scale(1.05);
+            border-color: var(--flutter-yellow);
+            box-shadow: 0 12px 40px rgba(1, 117, 194, 0.3);
+        }
+
+        .adventure-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem 0.5rem;
+                margin: 0;
+            }
+
+            .command-box {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+                margin: 0.8rem 0;
+            }
+
+            .nav-floating {
+                width: calc(100% - 1rem);
+                left: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.5rem 0.25rem;
+            }
+
+            .command-box {
+                font-size: 0.8rem;
+                padding: 0.6rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-floating">
+        <h3>📋 Quick Navigation</h3>
+        <a href="#overview">🎯 Overview</a>
+        <a href="#getting-started">🚀 Getting Started</a>
+        <a href="#learning-path">🎓 Learning Path</a>
+        <a href="#concepts">🎯 Key Concepts</a>
+        <a href="#daily-usage">🛠️ Daily Usage</a>
+        <a href="#journey">🎉 Your Journey</a>
+        <a href="#help">🆘 Need Help?</a>
+        <a href="#start">🚀 Ready to Start?</a>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>📚 Flutter Coverage Learning Materials</h1>
+            <p>Welcome to your complete Flutter test coverage learning kit! This collection of materials uses the <strong>Feynman Technique</strong> - explaining complex concepts in simple terms that anyone can understand.</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 50%"></div>
+            </div>
+            <small>Coverage Journey Progress: 50% Complete</small>
+        </div>
+
+        <section id="overview" class="section">
+            <h2>🎯 What's Included</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>📖 Documentation</h3>
+                    <div class="checklist">
+                        <li>
+                            <input type="checkbox" id="doc1">
+                            <label for="doc1"><strong>Complete Walkthrough</strong> - Comprehensive guide explaining everything from basics to advanced tips</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="doc2">
+                            <label for="doc2"><strong>Hands-On Exercise</strong> - Interactive practice sessions with your actual project</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="doc3">
+                            <label for="doc3"><strong>Quick Reference</strong> - Printable cheat sheet for daily use</label>
+                        </li>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🛠️ Interactive Tools</h3>
+                    <div class="checklist">
+                        <li>
+                            <input type="checkbox" id="tool1">
+                            <label for="tool1"><strong>Interactive Tutorial</strong> - Step-by-step guided walkthrough with quiz</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="tool2">
+                            <label for="tool2"><strong>Quick Coverage Check</strong> - Fast daily coverage analysis</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="tool3">
+                            <label for="tool3"><strong>Watch Script</strong> - Auto-run tests when files change</label>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="getting-started" class="section">
+            <h2>🚀 Getting Started</h2>
+            
+            <div class="learning-path">
+                <div class="day-card">
+                    <h4>🎓 For Complete Beginners</h4>
+                    <p>Start with the <strong>interactive tutorial</strong>:</p>
+                    <div class="command-box">
+                        <pre>./scripts/coverage-tutorial.sh</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, './scripts/coverage-tutorial.sh')">Copy</button>
+                    </div>
+                    <p>This will guide you through everything step-by-step with explanations, examples, and a fun quiz!</p>
+                </div>
+
+                <div class="day-card">
+                    <h4>🏃‍♂️ For Hands-On Learners</h4>
+                    <p>Jump into the <strong>practical exercise</strong>:</p>
+                    <div class="command-box">
+                        <pre># Read the exercise guide
+cat docs/hands-on-coverage-exercise.md
+
+# Start with a quick coverage check
+./scripts/quick-coverage.sh</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, 'cat docs/hands-on-coverage-exercise.md\n./scripts/quick-coverage.sh')">Copy</button>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h4>⚡ For Quick Reference</h4>
+                    <p>Use the <strong>cheat sheet</strong> for daily work:</p>
+                    <div class="command-box">
+                        <pre># View the quick reference
+cat docs/coverage-quick-reference.md
+
+# Or keep it open while coding
+xdg-open docs/coverage-quick-reference.md</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, 'cat docs/coverage-quick-reference.md\nxdg-open docs/coverage-quick-reference.md')">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="learning-path" class="section">
+            <h2>🎓 Learning Path</h2>
+            
+            <div class="learning-path">
+                <div class="day-card">
+                    <h4>📅 Day 1: Understanding (15 minutes)</h4>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="day1-1"> <label for="day1-1">Run <code>./scripts/coverage-tutorial.sh</code></label></li>
+                        <li><input type="checkbox" id="day1-2"> <label for="day1-2">Read the basic concepts</label></li>
+                        <li><input type="checkbox" id="day1-3"> <label for="day1-3">Check your current coverage</label></li>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h4>📅 Day 2: Practice (20 minutes)</h4>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="day2-1"> <label for="day2-1">Follow <code>docs/hands-on-coverage-exercise.md</code></label></li>
+                        <li><input type="checkbox" id="day2-2"> <label for="day2-2">Try improving your coverage by 5%</label></li>
+                        <li><input type="checkbox" id="day2-3"> <label for="day2-3">Explore the HTML report</label></li>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h4>📅 Day 3: Daily Workflow (10 minutes)</h4>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="day3-1"> <label for="day3-1">Use <code>./scripts/quick-coverage.sh</code> in your routine</label></li>
+                        <li><input type="checkbox" id="day3-2"> <label for="day3-2">Set up the watch script</label></li>
+                        <li><input type="checkbox" id="day3-3"> <label for="day3-3">Review the quick reference</label></li>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h4>📅 Ongoing: Mastery</h4>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="ongoing-1"> <label for="ongoing-1">Aim for 80%+ coverage on new features</label></li>
+                        <li><input type="checkbox" id="ongoing-2"> <label for="ongoing-2">Use coverage to guide testing decisions</label></li>
+                        <li><input type="checkbox" id="ongoing-3"> <label for="ongoing-3">Review coverage weekly</label></li>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="concepts" class="section">
+            <h2>🎯 Key Concepts (Feynman Style)</h2>
+            
+            <div class="card">
+                <h3>What is Coverage?</h3>
+                <p>Think of your app like a house and tests like a security inspection:</p>
+                <ul style="margin: 1rem 0; padding-left: 2rem;">
+                    <li><strong>🏠 Your app</strong> = The house</li>
+                    <li><strong>🔍 Your tests</strong> = Security checks</li>
+                    <li><strong>📊 Coverage %</strong> = How much of the house you actually inspected</li>
+                </ul>
+                <div class="alert alert-warning">
+                    <strong>⚠️ Important:</strong> If you only check 50% of the house, burglars might get in through the unchecked areas!
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Why Does It Matter?</h3>
+                <div class="metrics">
+                    <div class="metric-card">
+                        <span class="metric-value">🐛</span>
+                        <p>Find bugs early<br><small>(before users do)</small></p>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">💪</span>
+                        <p>Confidence to change code<br><small>(tests catch regressions)</small></p>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">📈</span>
+                        <p>Better code quality<br><small>(testing makes you think about edge cases)</small></p>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">😴</span>
+                        <p>Sleep better<br><small>(knowing your app is well-tested)</small></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>What's a Good Score?</h3>
+                <div class="coverage-levels">
+                    <div class="coverage-level coverage-low">
+                        🔴 Below 70%<br>Too risky
+                    </div>
+                    <div class="coverage-level coverage-medium">
+                        🟡 70-80%<br>Getting better
+                    </div>
+                    <div class="coverage-level coverage-good">
+                        🟢 80-90%<br>Great job!
+                    </div>
+                    <div class="coverage-level coverage-excellent">
+                        ⭐ 90%+<br>Excellent!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="daily-usage" class="section">
+            <h2>🛠️ Daily Usage</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>Quick Commands</h3>
+                    <div class="command-box">
+                        <pre># Morning check (2 minutes)
+./scripts/quick-coverage.sh
+
+# While coding (30 seconds) 
+flutter test --coverage
+
+# Before committing (1 minute)
+./scripts/quick-coverage.sh</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this, './scripts/quick-coverage.sh\nflutter test --coverage\n./scripts/quick-coverage.sh')">Copy</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Files You'll Use</h3>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="file1"> <label for="file1"><code>coverage/html/index.html</code> - Visual report (click to explore)</label></li>
+                        <li><input type="checkbox" id="file2"> <label for="file2"><code>coverage/lcov.info</code> - Raw data (for tools)</label></li>
+                        <li><input type="checkbox" id="file3"> <label for="file3"><code>scripts/quick-coverage.sh</code> - Your daily friend</label></li>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>🚨 Common Mistakes to Avoid</h3>
+                    <div class="alert alert-error">
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            <li>❌ <strong>Don't chase 100%</strong> - 80-90% is perfect</li>
+                            <li>❌ <strong>Don't test trivial code</strong> - Focus on important functionality</li>
+                            <li>❌ <strong>Don't ignore red lines</strong> - They might hide bugs</li>
+                            <li>❌ <strong>Don't skip error cases</strong> - Test what happens when things go wrong</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>✅ Best Practices</h3>
+                    <div class="alert alert-success">
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            <li>✅ <strong>Do focus on quality</strong> - Good tests that catch real bugs</li>
+                            <li>✅ <strong>Do make it routine</strong> - Check coverage daily</li>
+                            <li>✅ <strong>Do test user flows</strong> - How people actually use your app</li>
+                            <li>✅ <strong>Do celebrate improvements</strong> - Every % increase makes your app safer</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="journey" class="section">
+            <h2>🎉 Your Coverage Journey</h2>
+            
+            <div class="learning-path">
+                <div class="day-card">
+                    <h4>Beginner (Week 1)</h4>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="beginner-1"> <label for="beginner-1">Complete the interactive tutorial</label></li>
+                        <li><input type="checkbox" id="beginner-2"> <label for="beginner-2">Understand what coverage means</label></li>
+                        <li><input type="checkbox" id="beginner-3"> <label for="beginner-3">Run your first coverage analysis</label></li>
+                        <li><input type="checkbox" id="beginner-4"> <label for="beginner-4">Set a goal (suggest: 75%)</label></li>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h4>Intermediate (Week 2-4)</h4>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="intermediate-1"> <label for="intermediate-1">Use coverage daily in your workflow</label></li>
+                        <li><input type="checkbox" id="intermediate-2"> <label for="intermediate-2">Identify and test 3 important untested areas</label></li>
+                        <li><input type="checkbox" id="intermediate-3"> <label for="intermediate-3">Achieve your initial goal</label></li>
+                        <li><input type="checkbox" id="intermediate-4"> <label for="intermediate-4">Set a higher goal (suggest: 85%)</label></li>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h4>Advanced (Month 2+)</h4>
+                    <div class="checklist">
+                        <li><input type="checkbox" id="advanced-1"> <label for="advanced-1">Maintain 80%+ coverage on all new features</label></li>
+                        <li><input type="checkbox" id="advanced-2"> <label for="advanced-2">Use coverage to guide refactoring decisions</label></li>
+                        <li><input type="checkbox" id="advanced-3"> <label for="advanced-3">Help teammates understand coverage</label></li>
+                        <li><input type="checkbox" id="advanced-4"> <label for="advanced-4">Consider advanced techniques (mocking, integration tests)</label></li>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="help" class="section">
+            <h2>🆘 Need Help?</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>Quick Troubleshooting</h3>
+                    <div class="alert alert-info">
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            <li><strong>"No tests found"</strong> → Check files end with <code>_test.dart</code> in <code>test/</code> folder</li>
+                            <li><strong>"Command not found"</strong> → Install missing tools: <code>sudo apt install lcov</code></li>
+                            <li><strong>"Permission denied"</strong> → Make scripts executable: <code>chmod +x scripts/*.sh</code></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Learning Resources</h3>
+                    <ol style="margin: 1rem 0; padding-left: 2rem;">
+                        <li>Start with our <strong>interactive tutorial</strong>: <code>./scripts/coverage-tutorial.sh</code></li>
+                        <li>Practice with <strong>hands-on exercises</strong>: <code>docs/hands-on-coverage-exercise.md</code></li>
+                        <li>Keep the <strong>quick reference</strong> handy: <code>docs/coverage-quick-reference.md</code></li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Success Metrics</h3>
+                <p>You'll know you're succeeding when:</p>
+                <div class="checklist">
+                    <li><input type="checkbox" id="success-1"> <label for="success-1">✅ You check coverage without thinking about it</label></li>
+                    <li><input type="checkbox" id="success-2"> <label for="success-2">✅ You feel confident making code changes</label></li>
+                    <li><input type="checkbox" id="success-3"> <label for="success-3">✅ You catch bugs before they reach users</label></li>
+                    <li><input type="checkbox" id="success-4"> <label for="success-4">✅ You write tests naturally as you code</label></li>
+                    <li><input type="checkbox" id="success-5"> <label for="success-5">✅ Your coverage stays above 80% consistently</label></li>
+                </div>
+            </div>
+        </section>
+
+        <section id="start" class="section">
+            <h2>🚀 Ready to Start?</h2>
+            <p style="text-align: center; margin-bottom: 2rem; font-size: 1.2rem;">Choose your adventure:</p>
+            
+            <div class="adventure-grid">
+                <div class="adventure-card" onclick="copyToClipboard(this, './scripts/coverage-tutorial.sh')">
+                    <h4>🎓 Complete Beginner</h4>
+                    <p><code>./scripts/coverage-tutorial.sh</code></p>
+                </div>
+                <div class="adventure-card" onclick="openDoc('hands-on-coverage-exercise')">
+                    <h4>🏃‍♂️ Want to Practice</h4>
+                    <p><code>docs/hands-on-coverage-exercise.md</code></p>
+                </div>
+                <div class="adventure-card" onclick="openDoc('coverage-quick-reference')">
+                    <h4>⚡ Need Quick Info</h4>
+                    <p><code>docs/coverage-quick-reference.md</code></p>
+                </div>
+                <div class="adventure-card" onclick="copyToClipboard(this, './scripts/quick-coverage.sh')">
+                    <h4>💻 Daily User</h4>
+                    <p><code>./scripts/quick-coverage.sh</code></p>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="text-align: center; margin-top: 2rem;">
+                <strong>Remember:</strong> Coverage isn't about the number - it's about confidence that your code works! 🎯
+                <br><br>
+                <strong style="color: var(--flutter-yellow);">Happy testing! 🚀</strong>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Copy to clipboard functionality
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Open document function
+        function openDoc(docName) {
+            // In a real implementation, this would open the document
+            alert(`Opening ${docName}.html...`);
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Navigation highlighting
+        const navLinks = document.querySelectorAll('.nav-floating a');
+        const sections = document.querySelectorAll('.section');
+
+        function updateActiveNav() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNav);
+        updateActiveNav();
+
+        // Save checkbox states to localStorage
+        function saveCheckboxState() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const states = {};
+            checkboxes.forEach(checkbox => {
+                states[checkbox.id] = checkbox.checked;
+            });
+            localStorage.setItem('coverageCheckboxStates', JSON.stringify(states));
+            updateProgress();
+        }
+
+        // Load checkbox states from localStorage
+        function loadCheckboxStates() {
+            const savedStates = localStorage.getItem('coverageCheckboxStates');
+            if (savedStates) {
+                const states = JSON.parse(savedStates);
+                Object.keys(states).forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.checked = states[id];
+                    }
+                });
+            }
+            updateProgress();
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const progress = (checkedBoxes.length / checkboxes.length) * 100;
+            
+            const progressBar = document.querySelector('.progress-fill');
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // Add event listeners to checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', saveCheckboxState);
+        });
+
+        // Load states on page load
+        loadCheckboxStates();
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveCheckboxState();
+                alert('Progress saved! 💾');
+            }
+            if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+                e.preventDefault();
+                if (confirm('Reset all progress? This cannot be undone.')) {
+                    localStorage.removeItem('coverageCheckboxStates');
+                    location.reload();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

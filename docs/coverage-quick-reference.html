@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Flutter Coverage Quick Reference</title>
+    <style>
+        :root {
+            --primary-blue: #0175C2;
+            --success-green: #28a745;
+            --warning-yellow: #ffc107;
+            --danger-red: #dc3545;
+            --info-cyan: #17a2b8;
+            --light-gray: #f8f9fa;
+            --dark-gray: #6c757d;
+            --border-color: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), #025aa5);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: var(--primary-blue);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--primary-blue);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            color: #555;
+            font-size: 1.3rem;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .code-inline {
+            background: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #d73a49;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: var(--light-gray);
+            color: #333;
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-excellent { background: var(--success-green); color: white; }
+        .badge-good { background: var(--warning-yellow); color: #333; }
+        .badge-acceptable { background: #fd7e14; color: white; }
+        .badge-risky { background: var(--danger-red); color: white; }
+
+        .workflow-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .workflow-step {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .workflow-step h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .tip-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .tip-card h4 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .coverage-legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: white;
+            border: 2px solid var(--border-color);
+            font-weight: 500;
+        }
+
+        .color-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .green { background: var(--success-green); }
+        .red { background: var(--danger-red); }
+        .gray { background: var(--dark-gray); }
+
+        .copy-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            float: right;
+            margin-top: -10px;
+        }
+
+        .copy-btn:hover {
+            background: #025aa5;
+        }
+
+        .expandable {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .expandable-header {
+            background: var(--light-gray);
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .expandable-content {
+            padding: 20px;
+            display: none;
+        }
+
+        .expandable.active .expandable-content {
+            display: block;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expandable.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .highlight-box h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .print-friendly {
+            display: none;
+        }
+
+        @media print {
+            .print-friendly { display: block; }
+            .no-print { display: none; }
+            body { background: white; }
+            .container { box-shadow: none; }
+        }
+
+        @media (max-width: 768px) {
+            .content { padding: 20px; }
+            .header { padding: 20px; }
+            .header h1 { font-size: 2rem; }
+            .coverage-legend { flex-direction: column; }
+            .tips-grid { grid-template-columns: 1fr; }
+        }
+
+        .toc {
+            background: var(--light-gray);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .toc h3 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        .toc ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+        }
+
+        .toc a {
+            color: #333;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: block;
+            transition: background 0.2s ease;
+        }
+
+        .toc a:hover {
+            background: white;
+            color: var(--primary-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Flutter Coverage Quick Reference</h1>
+            <p>Your essential guide to Flutter test coverage analysis</p>
+        </div>
+
+        <div class="content">
+            <!-- Table of Contents -->
+            <div class="toc">
+                <h3>📋 Quick Navigation</h3>
+                <ul>
+                    <li><a href="#commands">Commands Cheat Sheet</a></li>
+                    <li><a href="#interpretation">Coverage Interpretation</a></li>
+                    <li><a href="#visual-legend">Visual Report Legend</a></li>
+                    <li><a href="#workflow">Daily Workflow</a></li>
+                    <li><a href="#troubleshooting">Troubleshooting</a></li>
+                    <li><a href="#strategy">Testing Strategy</a></li>
+                    <li><a href="#goals">Coverage Goals</a></li>
+                    <li><a href="#quick-boost">Quick Coverage Boost</a></li>
+                </ul>
+            </div>
+
+            <!-- Commands Section -->
+            <div class="section" id="commands">
+                <h2>📋 Commands Cheat Sheet</h2>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+# Essential Commands (Copy & Paste Ready)
+
+# Run basic coverage
+flutter test --coverage
+
+# Quick coverage with our script  
+./scripts/quick-coverage.sh
+
+# View visual report
+xdg-open coverage/html/index.html
+
+# Get text summary
+lcov --summary coverage/lcov.info
+
+# Watch for changes (auto-run tests)
+./scripts/watch-coverage.sh
+                </div>
+            </div>
+
+            <!-- Coverage Interpretation -->
+            <div class="section" id="interpretation">
+                <h2>🎯 Coverage Interpretation Guide</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Coverage %</th>
+                                <th>Status</th>
+                                <th>What to Do</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>95%+</td>
+                                <td><span class="badge badge-excellent">⭐ Outstanding</span></td>
+                                <td>Maintain quality, focus on edge cases</td>
+                            </tr>
+                            <tr>
+                                <td>90-94%</td>
+                                <td><span class="badge badge-excellent">🟢 Excellent</span></td>
+                                <td>You're doing great! Minor improvements</td>
+                            </tr>
+                            <tr>
+                                <td>80-89%</td>
+                                <td><span class="badge badge-good">🟡 Good</span></td>
+                                <td>Solid foundation, add more tests</td>
+                            </tr>
+                            <tr>
+                                <td>70-79%</td>
+                                <td><span class="badge badge-acceptable">🟠 Acceptable</span></td>
+                                <td>Need improvement, focus on main features</td>
+                            </tr>
+                            <tr>
+                                <td>Below 70%</td>
+                                <td><span class="badge badge-risky">🔴 Risky</span></td>
+                                <td>Urgent: Add tests for core functionality</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Visual Legend -->
+            <div class="section" id="visual-legend">
+                <h2>🚦 Visual Report Legend</h2>
+                <div class="coverage-legend">
+                    <div class="legend-item">
+                        <div class="color-indicator green"></div>
+                        <span><strong>Green Lines:</strong> Code is tested ✅</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-indicator red"></div>
+                        <span><strong>Red Lines:</strong> Code NOT tested ❌</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-indicator gray"></div>
+                        <span><strong>No Color:</strong> Comments/whitespace ➖</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Important Files -->
+            <div class="section">
+                <h2>📁 Important Files</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>What It Contains</th>
+                                <th>When to Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code class="code-inline">coverage/lcov.info</code></td>
+                                <td>Raw coverage data</td>
+                                <td>For tools/scripts</td>
+                            </tr>
+                            <tr>
+                                <td><code class="code-inline">coverage/html/index.html</code></td>
+                                <td>Visual report</td>
+                                <td>Daily review</td>
+                            </tr>
+                            <tr>
+                                <td><code class="code-inline">coverage/detailed_summary.md</code></td>
+                                <td>Text summary</td>
+                                <td>Quick check</td>
+                            </tr>
+                            <tr>
+                                <td><code class="code-inline">scripts/quick-coverage.sh</code></td>
+                                <td>Fast coverage run</td>
+                                <td>Multiple times per day</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Daily Workflow -->
+            <div class="section" id="workflow">
+                <h2>🔄 Daily Workflow</h2>
+                <div class="workflow-card">
+                    <div class="workflow-step">
+                        <h4>☀️ Morning (2 minutes)</h4>
+                        <div class="code-block">./scripts/quick-coverage.sh</div>
+                        <p><em>Check current status before starting work</em></p>
+                    </div>
+                    <div class="workflow-step">
+                        <h4>💻 While Coding (30 seconds)</h4>
+                        <div class="code-block">flutter test --coverage && xdg-open coverage/html/index.html</div>
+                        <p><em>After writing new features</em></p>
+                    </div>
+                    <div class="workflow-step">
+                        <h4>🌙 Before Commit (1 minute)</h4>
+                        <div class="code-block">./scripts/quick-coverage.sh<br># If coverage dropped, write more tests!</div>
+                        <p><em>Ensure quality before sharing code</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="section" id="troubleshooting">
+                <h2>🆘 Troubleshooting</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Problem</th>
+                                <th>Quick Fix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>"No tests found"</td>
+                                <td>Check files end with <code class="code-inline">_test.dart</code> in <code class="code-inline">test/</code> folder</td>
+                            </tr>
+                            <tr>
+                                <td>"lcov command not found"</td>
+                                <td><code class="code-inline">sudo apt install lcov</code></td>
+                            </tr>
+                            <tr>
+                                <td>"Permission denied"</td>
+                                <td><code class="code-inline">chmod +x scripts/quick-coverage.sh</code></td>
+                            </tr>
+                            <tr>
+                                <td>Tests fail</td>
+                                <td>Read error message, fix the failing test</td>
+                            </tr>
+                            <tr>
+                                <td>Coverage drops</td>
+                                <td>Check what code you added, write tests for it</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Testing Strategy -->
+            <div class="section" id="strategy">
+                <h2>🎯 Smart Testing Strategy</h2>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h4>✅ Test These First (High Priority)</h4>
+                        <ul>
+                            <li>Main app features (login, core functionality)</li>
+                            <li>User interactions (button clicks, form submissions)</li>
+                            <li>Data processing (calculations, transformations)</li>
+                            <li>Error conditions (network failures, invalid input)</li>
+                        </ul>
+                    </div>
+                    <div class="tip-card">
+                        <h4>⚡ Can Skip These (Low Priority)</h4>
+                        <ul>
+                            <li>Simple getters/setters</li>
+                            <li>Print/log statements</li>
+                            <li>Generated code</li>
+                            <li>Trivial constructors</li>
+                        </ul>
+                    </div>
+                    <div class="tip-card">
+                        <h4>🧠 Think Like a User</h4>
+                        <ol>
+                            <li>What would a user do with this feature?</li>
+                            <li>What could go wrong?</li>
+                            <li>What edge cases exist?</li>
+                            <li>How would this break?</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coverage Goals -->
+            <div class="section" id="goals">
+                <h2>📊 Coverage Goals by Project Type</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Project Type</th>
+                                <th>Minimum</th>
+                                <th>Target</th>
+                                <th>Excellent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Personal/Learning</strong></td>
+                                <td>60%</td>
+                                <td>75%</td>
+                                <td>85%+</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Professional</strong></td>
+                                <td>75%</td>
+                                <td>85%</td>
+                                <td>90%+</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Critical Systems</strong></td>
+                                <td>85%</td>
+                                <td>90%</td>
+                                <td>95%+</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Open Source</strong></td>
+                                <td>80%</td>
+                                <td>85%</td>
+                                <td>90%+</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Quick Coverage Boost -->
+            <div class="section" id="quick-boost">
+                <h2>🏃‍♂️ 5-Minute Coverage Boost</h2>
+                <p>Need to quickly improve coverage? Try these:</p>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span>1. Test Constructor (Easy win)</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="expandable-content">
+                        <div class="code-block">
+test('creates widget', () {
+  final widget = MyWidget();
+  expect(widget, isNotNull);
+});
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span>2. Test Simple Methods (Easy win)</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="expandable-content">
+                        <div class="code-block">
+test('getter returns correct value', () {
+  final counter = Counter();
+  expect(counter.value, equals(0));
+});
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span>3. Test User Interactions (Medium effort)</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="expandable-content">
+                        <div class="code-block">
+testWidgets('button tap increases counter', (tester) async {
+  await tester.pumpWidget(MyApp());
+  await tester.tap(find.byIcon(Icons.add));
+  await tester.pump();
+  expect(find.text('1'), findsOneWidget);
+});
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span>4. Test Error Cases (High value)</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="expandable-content">
+                        <div class="code-block">
+test('throws exception on invalid input', () {
+  expect(() => divide(10, 0), throwsException);
+});
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Section -->
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🧪 Advanced Tricks</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h3>Filter Unimportant Files</h3>
+                    <div class="code-block">
+lcov --remove coverage/lcov.info \
+  '*/generated/*' \
+  '*/build/*' \
+  '*/test/*' \
+  --output-file coverage/clean.info
+                    </div>
+
+                    <h3>Set Coverage Thresholds</h3>
+                    <div class="code-block">
+# Fail CI if coverage < 80%
+COVERAGE=$(lcov --summary coverage/lcov.info | grep -o '[0-9.]*%' | head -1 | tr -d '%')
+if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+  echo "Coverage too low: $COVERAGE%"
+  exit 1
+fi
+                    </div>
+
+                    <h3>Track Coverage Over Time</h3>
+                    <div class="code-block">
+echo "$(date): $(lcov --summary coverage/lcov.info | grep 'lines' | grep -o '[0-9.]*%')" >> coverage_history.txt
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pro Tips -->
+            <div class="highlight-box">
+                <h3>💡 Pro Tips</h3>
+                <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+                    <li><strong>Focus on Value:</strong> 80% good coverage > 95% meaningless coverage</li>
+                    <li><strong>Test Behavior:</strong> Not implementation details</li>
+                    <li><strong>Quality First:</strong> One test that catches real bugs > Ten tests that don't</li>
+                    <li><strong>Daily Habit:</strong> Make coverage part of your routine</li>
+                </ul>
+            </div>
+
+            <!-- Mobile Commands -->
+            <div class="section">
+                <h2>📱 Mobile-Friendly Commands</h2>
+                <p>Add these aliases to your <code class="code-inline">~/.bashrc</code> for quick access:</p>
+                <div class="code-block">
+# Ultra-short commands
+alias fcov='flutter test --coverage'
+alias vcov='xdg-open coverage/html/index.html'
+alias qcov='./scripts/quick-coverage.sh'
+                </div>
+            </div>
+
+            <!-- Remember Section -->
+            <div class="highlight-box">
+                <h3>🎓 Remember</h3>
+                <blockquote style="font-size: 1.2rem; font-style: italic; margin: 15px 0;">
+                    "Coverage is not about the number - it's about confidence"
+                </blockquote>
+                <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+                    <li>✅ Test what matters most first</li>
+                    <li>✅ Use coverage to find untested areas</li>
+                    <li>✅ Make it part of your daily routine</li>
+                    <li>✅ Focus on quality over quantity</li>
+                </ul>
+            </div>
+
+            <div class="print-friendly">
+                <p><em>Print this page and keep it next to your monitor for quick reference!</em></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling || button.parentElement;
+            const code = codeBlock.textContent.replace('Copy', '').trim();
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        function toggleExpand(header) {
+            const expandable = header.parentElement;
+            expandable.classList.toggle('active');
+        }
+
+        // Add copy buttons to all code blocks
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                if (!block.querySelector('.copy-btn')) {
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-btn';
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.onclick = function() { copyCode(this); };
+                    block.insertBefore(copyBtn, block.firstChild);
+                }
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

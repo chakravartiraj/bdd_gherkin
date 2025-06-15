@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 BDD Gherkin Flutter Documentation Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            overflow-x: auto;
+            min-width: 320px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            min-width: 300px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #02AAB0 0%, #00CDAC 100%);
+            border-radius: 15px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-100px) translateY(-100px); }
+            100% { transform: translateX(100px) translateY(100px); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .category-card {
+            background: linear-gradient(145deg, #f8f9ff, #e8f4fd);
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #02AAB0;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #02AAB0, #00CDAC);
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+            opacity: 0.1;
+        }
+
+        .category-card h2 {
+            color: #02AAB0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            position: relative;
+        }
+
+        .category-card p {
+            margin-bottom: 20px;
+            color: #666;
+            position: relative;
+        }
+
+        .docs-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .docs-list li {
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .docs-list a {
+            display: block;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .docs-list a:hover {
+            background: #02AAB0;
+            color: white;
+            border-left-color: #00CDAC;
+            transform: translateX(5px);
+        }
+
+        .doc-type {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-left: 10px;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #fff9c4, #fff59d);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #02AAB0;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .quick-actions {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            border-left: 4px solid #28a745;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .action-button {
+            display: block;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #02AAB0, #00CDAC);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+                border-radius: 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .category-card {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 5px;
+                padding: 10px;
+            }
+
+            .category-card {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 BDD Gherkin Flutter Documentation Hub</h1>
+            <p>Your complete guide to Flutter testing, analysis, and coverage</p>
+        </div>
+
+        <div class="stats-section">
+            <h2>📊 Documentation Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">HTML Guides</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Markdown Sources</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Topic Areas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Coverage</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-grid">
+            <div class="category-card">
+                <h2>🔍 Code Analysis</h2>
+                <p>Learn how to analyze your Flutter code for quality, style, and potential issues using <code>flutter analyze</code>.</p>
+                <ul class="docs-list">
+                    <li><a href="analyze-README.html">📖 Analysis README <span class="doc-type">(Overview)</span></a></li>
+                    <li><a href="analyze-quick-reference.html">⚡ Quick Reference <span class="doc-type">(Commands)</span></a></li>
+                    <li><a href="flutter-analyze-walkthrough.html">🚶 Complete Walkthrough <span class="doc-type">(Tutorial)</span></a></li>
+                    <li><a href="hands-on-analyze-exercise.html">🏋️ Hands-On Exercises <span class="doc-type">(Practice)</span></a></li>
+                </ul>
+            </div>
+
+            <div class="category-card">
+                <h2>📊 Test Coverage</h2>
+                <p>Master test coverage measurement and reporting to ensure your Flutter app is thoroughly tested.</p>
+                <ul class="docs-list">
+                    <li><a href="coverage-README.html">📖 Coverage README <span class="doc-type">(Overview)</span></a></li>
+                    <li><a href="coverage-quick-reference.html">⚡ Quick Reference <span class="doc-type">(Commands)</span></a></li>
+                    <li><a href="flutter-coverage-walkthrough.html">🚶 Complete Walkthrough <span class="doc-type">(Tutorial)</span></a></li>
+                    <li><a href="hands-on-coverage-exercise.html">🏋️ Hands-On Exercises <span class="doc-type">(Practice)</span></a></li>
+                </ul>
+            </div>
+
+            <div class="category-card">
+                <h2>🧪 Flutter Testing</h2>
+                <p>Comprehensive testing guide using BDD/Gherkin approach with unit tests, widget tests, and more.</p>
+                <ul class="docs-list">
+                    <li><a href="test-README.html">📖 Testing README <span class="doc-type">(Overview)</span></a></li>
+                    <li><a href="test-quick-reference.html">⚡ Quick Reference <span class="doc-type">(Commands)</span></a></li>
+                    <li><a href="flutter-test-walkthrough.html">🚶 Complete Walkthrough <span class="doc-type">(Tutorial)</span></a></li>
+                    <li><a href="hands-on-test-exercise.html">🏋️ Hands-On Exercises <span class="doc-type">(Practice)</span></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <h2>🚀 Quick Actions</h2>
+            <div class="actions-grid">
+                <a href="flutter-test-walkthrough.html" class="action-button">
+                    🎓 Start Testing Tutorial
+                </a>
+                <a href="flutter-coverage-walkthrough.html" class="action-button">
+                    📈 Learn Coverage
+                </a>
+                <a href="flutter-analyze-walkthrough.html" class="action-button">
+                    🔍 Master Analysis
+                </a>
+                <a href="hands-on-test-exercise.html" class="action-button">
+                    🏋️ Practice Testing
+                </a>
+                <a href="hands-on-coverage-exercise.html" class="action-button">
+                    📊 Practice Coverage
+                </a>
+                <a href="hands-on-analyze-exercise.html" class="action-button">
+                    🔧 Practice Analysis
+                </a>
+            </div>
+        </div>
+
+        <div class="category-card">
+            <h2>🗂️ Source Organization</h2>
+            <p>All markdown source files are organized in topic-specific directories:</p>
+            <ul class="docs-list">
+                <li><strong>📁 docs/analyze/</strong> - Analysis markdown sources</li>
+                <li><strong>📁 docs/coverage/</strong> - Coverage markdown sources</li>
+                <li><strong>📁 docs/test/</strong> - Testing markdown sources</li>
+            </ul>
+            <p style="margin-top: 15px; font-style: italic; color: #666;">
+                HTML files remain in the root docs/ directory for easy web access and linking.
+            </p>
+        </div>
+
+        <div class="stats-section">
+            <h2>✨ Features</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="background: white; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #02AAB0; margin-bottom: 10px;">🎨 Modern Design</h3>
+                    <p>Beautiful, responsive HTML with Flutter-themed gradients and animations</p>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #02AAB0; margin-bottom: 10px;">📱 Mobile Friendly</h3>
+                    <p>Responsive design that works perfectly on all device sizes</p>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #02AAB0; margin-bottom: 10px;">📋 Copy Commands</h3>
+                    <p>One-click copy functionality for all code blocks and commands</p>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #02AAB0; margin-bottom: 10px;">💾 Auto-Save Progress</h3>
+                    <p>Progress tracking with localStorage for hands-on exercises</p>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #02AAB0; margin-bottom: 10px;">🧭 Easy Navigation</h3>
+                    <p>Floating navigation and smooth scrolling for better UX</p>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #02AAB0; margin-bottom: 10px;">🎯 No Scrolling Issues</h3>
+                    <p>Fixed horizontal scrolling with custom webkit scrollbars</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #f8f9ff, #e8f4fd); border-radius: 15px;">
+            <h2 style="color: #02AAB0; margin-bottom: 15px;">🎉 Ready to Get Started?</h2>
+            <p style="margin-bottom: 20px; font-size: 1.1rem;">Choose your learning path and dive into Flutter development best practices!</p>
+            <a href="flutter-test-walkthrough.html" style="display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #02AAB0, #00CDAC); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
+                🚀 Start Your Journey
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scrolling for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
