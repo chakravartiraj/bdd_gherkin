@@ -26,8 +26,8 @@ This project serves as a **complete learning resource** for Flutter developers w
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/flutter-bdd-gherkin.git
-cd flutter-bdd-gherkin
+git clone https://github.com/chakravartiraj/bdd_gherkin.git
+cd bdd_gherkin
 
 # Install dependencies
 flutter pub get
@@ -126,7 +126,7 @@ void main() {
 ## 🗂️ Project Structure
 
 ```
-📦 flutter-bdd-gherkin/
+📦 bdd_gherkin/
 ├── 📂 docs/                   # Comprehensive documentation
 │   ├── 🌐 *.html              # Ready-to-view HTML guides
 │   ├── 📂 test/               # Testing documentation sources
@@ -260,8 +260,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - **📖 Documentation**: [Full Documentation Hub](docs/index.html)
-- **🐛 Issues**: [GitHub Issues](https://github.com/YOUR_USERNAME/flutter-bdd-gherkin/issues)
-- **💬 Discussions**: [GitHub Discussions](https://github.com/YOUR_USERNAME/flutter-bdd-gherkin/discussions)
+- **🐛 Issues**: [GitHub Issues](https://github.com/chakravartiraj/bdd_gherkin/issues)
+- **💬 Discussions**: [GitHub Discussions](https://github.com/chakravartiraj/bdd_gherkin/discussions)
 
 ---
 
