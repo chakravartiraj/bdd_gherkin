@@ -132,14 +132,17 @@ void main() {
 │   ├── 📂 test/               # Testing documentation sources
 │   ├── 📂 coverage/           # Coverage documentation sources
 │   └── 📂 analyze/            # Analysis documentation sources
-├── 📂 scripts/                # Development automation (12 scripts)
+├── 📂 scripts/                # Development automation (13 scripts)
 │   ├── 🎛️ dev.sh              # Interactive development hub
 │   ├── 🧪 test-*.sh           # Testing automation
+│   ├── 🎯 golden-test.sh      # Golden UI testing
 │   ├── 📊 coverage-*.sh       # Coverage automation
 │   └── 🔍 analyze-*.sh        # Analysis automation
 ├── 📂 test/                   # Test files
 │   ├── 📄 *.feature           # Gherkin feature files
-│   ├── 🧪 *_test.dart         # Generated test files
+│   ├── 🧪 *_test.dart         # Test files
+│   ├── 🎯 golden_test.dart    # Golden UI tests
+│   ├── 📂 goldens/            # Golden master images
 │   └── 📂 step/               # BDD step definitions
 ├── 📂 lib/                    # App source code
 └── 📂 coverage/               # Coverage reports (auto-generated)
@@ -147,13 +150,14 @@ void main() {
 
 ## 🔧 Development Scripts
 
-This project includes **12 powerful development scripts**:
+This project includes **13 powerful development scripts**:
 
 ### Core Scripts
 - **`dev.sh`** - Interactive development hub with menus
 - **`test-quick.sh`** - Fast test execution with smart filtering
 - **`coverage-quick.sh`** - Quick coverage analysis
 - **`analyze-daily.sh`** - Code quality analysis
+- **`golden-test.sh`** - Golden UI testing automation
 
 ### Watch Scripts  
 - **`test-watch.sh`** - Auto-run tests on file changes
@@ -176,7 +180,8 @@ All scripts include **comprehensive help**: `./scripts/SCRIPT_NAME.sh --help`
 1. **🔬 Unit Tests** - Test individual functions and classes
 2. **🖼️ Widget Tests** - Test UI components in isolation  
 3. **🎭 BDD Tests** - Test user scenarios with Gherkin syntax
-4. **🔗 Integration Tests** - Test complete user workflows
+4. **🎯 Golden Tests** - Test UI consistency with pixel-perfect screenshots
+5. **🔗 Integration Tests** - Test complete user workflows
 
 ### Coverage Goals
 - **Minimum**: 80% line coverage
@@ -195,6 +200,10 @@ flutter test --coverage
 ./scripts/test-quick.sh unit      # Unit tests only
 ./scripts/test-quick.sh widget    # Widget tests only  
 ./scripts/test-quick.sh bdd       # BDD tests only
+
+# Run golden tests
+./scripts/golden-test.sh run      # Golden UI tests
+./scripts/golden-test.sh update   # Update golden images
 
 # Generate coverage reports
 ./scripts/coverage-quick.sh
