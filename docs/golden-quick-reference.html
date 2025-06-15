@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Golden Testing Quick Reference</title>
+    <style>
+        :root {
+            --flutter-blue: #0175C2;
+            --flutter-navy: #02539A;
+            --flutter-sky: #13B9FD;
+            --flutter-yellow: #FFC108;
+            --bg-primary: #0A0E27;
+            --bg-secondary: #1A1F3A;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0BEC5;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --info: #2196F3;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, var(--flutter-blue), var(--flutter-sky));
+            --gradient-secondary: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius);
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-card {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .quick-card h2 {
+            color: var(--flutter-sky);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .command-item {
+            background: var(--bg-primary);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--flutter-yellow);
+            position: relative;
+        }
+
+        .command-item code {
+            color: var(--flutter-sky);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .command-item p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--flutter-blue);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: background-color 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: var(--flutter-navy);
+        }
+
+        .nav-floating {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-floating a {
+            color: var(--flutter-sky);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-floating a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .back-link {
+            display: inline-block;
+            background: var(--flutter-blue);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            margin-top: 2rem;
+            transition: background-color 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--flutter-navy);
+        }
+
+        .success-icon { color: var(--success); }
+        .warning-icon { color: var(--warning); }
+        .error-icon { color: var(--error); }
+        .info-icon { color: var(--info); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1.1rem; }
+            .container { padding: 1rem; }
+            .nav-floating { display: none; }
+            .quick-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-floating">
+        <a href="index.html">🏠 Documentation Hub</a>
+        <a href="flutter-golden-walkthrough.html">📖 Full Guide</a>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>⚡ Golden Testing Quick Reference</h1>
+            <p>Essential golden testing commands and snippets</p>
+        </div>
+
+        <div class="quick-grid">
+            <div class="quick-card">
+                <h2>🚀 Script Commands</h2>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>./scripts/golden-test.sh run</code>
+                    <p>Run all golden tests</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>./scripts/golden-test.sh update</code>
+                    <p>Generate/update golden master images</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>./scripts/golden-test.sh status</code>
+                    <p>Check golden test setup status</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>./scripts/golden-test.sh clean</code>
+                    <p>Remove all golden files</p>
+                </div>
+            </div>
+
+            <div class="quick-card">
+                <h2>🔧 Flutter Commands</h2>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>flutter test test/golden_test.dart</code>
+                    <p>Run golden tests directly</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>flutter test test/golden_test.dart --update-goldens</code>
+                    <p>Update golden files</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>flutter test test/golden_test.dart --verbose</code>
+                    <p>Run with detailed output</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>flutter test --update-goldens --plain-name "test name"</code>
+                    <p>Update specific test</p>
+                </div>
+            </div>
+
+            <div class="quick-card">
+                <h2>📝 Basic Test Template</h2>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>testGoldens('Widget Test', (tester) async {
+  await tester.pumpWidgetBuilder(
+    const MyWidget(),
+    surfaceSize: const Size(400, 800),
+  );
+  await screenMatchesGolden(tester, 'widget_test');
+});</code>
+                    <p>Single widget golden test</p>
+                </div>
+            </div>
+
+            <div class="quick-card">
+                <h2>📱 Multi-Device Template</h2>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>testGoldens('Multi Device', (tester) async {
+  final builder = DeviceBuilder()
+    ..overrideDevicesForAllScenarios(
+      devices: [Device.phone, Device.tablet],
+    )
+    ..addScenario(widget: MyWidget(), name: 'scenario');
+  await tester.pumpDeviceBuilder(builder);
+  await screenMatchesGolden(tester, 'multi_device');
+});</code>
+                    <p>Multiple device sizes test</p>
+                </div>
+            </div>
+
+            <div class="quick-card">
+                <h2>🎯 Available Devices</h2>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>Device.phone</code>
+                    <p>Generic phone (375x812)</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>Device.iphone11</code>
+                    <p>iPhone 11 size</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>Device.tabletPortrait</code>
+                    <p>Tablet portrait (768x1024)</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>Device.desktop</code>
+                    <p>Desktop size (1366x768)</p>
+                </div>
+            </div>
+
+            <div class="quick-card">
+                <h2>⚙️ Test Configuration</h2>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>// test/flutter_test_config.dart
+import 'dart:async';
+import 'package:golden_toolkit/golden_toolkit.dart';
+
+Future&lt;void&gt; testExecutable(FutureOr&lt;void&gt; Function() testMain) async {
+  return GoldenToolkit.runWithConfiguration(
+    () async {
+      await loadAppFonts();
+      await testMain();
+    },
+    config: GoldenToolkitConfiguration(
+      enableRealShadows: true,
+      defaultDevices: const [Device.phone],
+    ),
+  );
+}</code>
+                    <p>Essential test configuration</p>
+                </div>
+            </div>
+
+            <div class="quick-card">
+                <h2>🔍 Debugging Tips</h2>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>await tester.pumpAndSettle();</code>
+                    <p>Wait for animations to complete</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>surfaceSize: const Size(400, 800)</code>
+                    <p>Set explicit widget size</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>await loadAppFonts();</code>
+                    <p>Load fonts for consistent rendering</p>
+                </div>
+                <div class="command-item">
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                    <code>enableRealShadows: true</code>
+                    <p>Enable shadows in golden tests</p>
+                </div>
+            </div>
+
+            <div class="quick-card">
+                <h2>📁 File Locations</h2>
+                <div class="command-item">
+                    <code>test/golden_test.dart</code>
+                    <p>Golden test definitions</p>
+                </div>
+                <div class="command-item">
+                    <code>test/flutter_test_config.dart</code>
+                    <p>Test configuration</p>
+                </div>
+                <div class="command-item">
+                    <code>test/goldens/</code>
+                    <p>Generated golden images</p>
+                </div>
+                <div class="command-item">
+                    <code>scripts/golden-test.sh</code>
+                    <p>Golden test helper script</p>
+                </div>
+            </div>
+
+            <div class="quick-card">
+                <h2>🎨 Best Practices</h2>
+                <div class="command-item">
+                    <code><span class="success-icon">✅</span> Test multiple states</code>
+                    <p>Initial, loading, success, error states</p>
+                </div>
+                <div class="command-item">
+                    <code><span class="success-icon">✅</span> Use descriptive names</code>
+                    <p>login_form_validation_error.png</p>
+                </div>
+                <div class="command-item">
+                    <code><span class="success-icon">✅</span> Test multiple devices</code>
+                    <p>Phone, tablet, desktop layouts</p>
+                </div>
+                <div class="command-item">
+                    <code><span class="success-icon">✅</span> Group related tests</code>
+                    <p>Organize by feature/widget</p>
+                </div>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">🏠 Back to Documentation Hub</a>
+    </div>
+
+    <script>
+        function copyCommand(button) {
+            const codeElement = button.nextElementSibling;
+            const text = codeElement.textContent || codeElement.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#4CAF50';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#0175C2';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                button.textContent = 'Failed';
+                button.style.background = '#F44336';
+                
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.style.background = '#0175C2';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

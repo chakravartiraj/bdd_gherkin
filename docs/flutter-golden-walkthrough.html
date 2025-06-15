@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Golden Testing with golden_toolkit</title>
+    <style>
+        :root {
+            --flutter-blue: #0175C2;
+            --flutter-navy: #02539A;
+            --flutter-sky: #13B9FD;
+            --flutter-yellow: #FFC108;
+            --bg-primary: #0A0E27;
+            --bg-secondary: #1A1F3A;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0BEC5;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --info: #2196F3;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, var(--flutter-blue), var(--flutter-sky));
+            --gradient-secondary: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius);
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-floating {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-floating a {
+            color: var(--flutter-sky);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-floating a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .section {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .section h2 {
+            color: var(--flutter-sky);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .section h3 {
+            color: var(--flutter-yellow);
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.5rem;
+        }
+
+        .section h4 {
+            color: var(--text-primary);
+            margin: 1rem 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .code-block {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            color: var(--text-primary);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--flutter-blue);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background-color 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: var(--flutter-navy);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-primary);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        th {
+            background: var(--flutter-blue);
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h4 {
+            color: var(--flutter-yellow);
+            margin-bottom: 0.5rem;
+        }
+
+        .command-list {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin: 1rem 0;
+        }
+
+        .command-list h4 {
+            color: var(--flutter-sky);
+            margin-bottom: 1rem;
+        }
+
+        .command-item {
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--flutter-yellow);
+        }
+
+        .command-item code {
+            color: var(--flutter-sky);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+
+        .success-icon { color: var(--success); }
+        .warning-icon { color: var(--warning); }
+        .error-icon { color: var(--error); }
+        .info-icon { color: var(--info); }
+
+        .back-link {
+            display: inline-block;
+            background: var(--flutter-blue);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            margin-top: 2rem;
+            transition: background-color 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--flutter-navy);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1.1rem; }
+            .container { padding: 1rem; }
+            .nav-floating { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-floating">
+        <a href="index.html">🏠 Documentation Hub</a>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>🎯 Golden Testing Guide</h1>
+            <p>Master UI testing with golden_toolkit for pixel-perfect Flutter apps</p>
+        </div>
+
+        <div class="section">
+            <h2>📖 Overview</h2>
+            <p>Golden testing (also known as snapshot testing) is a powerful technique for ensuring your Flutter UI remains consistent across code changes. The <code>golden_toolkit</code> package provides the best golden testing experience for Flutter.</p>
+        </div>
+
+        <div class="section">
+            <h2>✨ Why golden_toolkit?</h2>
+            <h3>Advantages over Flutter's built-in golden tests:</h3>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Built-in Golden Tests</th>
+                            <th>golden_toolkit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Cross-platform consistency</strong></td>
+                            <td><span class="error-icon">❌</span> OS-dependent</td>
+                            <td><span class="success-icon">✅</span> Identical across OS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Device simulation</strong></td>
+                            <td><span class="warning-icon">⚠️</span> Basic</td>
+                            <td><span class="success-icon">✅</span> Multiple devices</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Font loading</strong></td>
+                            <td><span class="error-icon">❌</span> Manual setup</td>
+                            <td><span class="success-icon">✅</span> Automatic</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Loading states</strong></td>
+                            <td><span class="error-icon">❌</span> Manual handling</td>
+                            <td><span class="success-icon">✅</span> Built-in support</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multi-widget testing</strong></td>
+                            <td><span class="error-icon">❌</span> Single widget</td>
+                            <td><span class="success-icon">✅</span> Multiple scenarios</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Failure debugging</strong></td>
+                            <td><span class="warning-icon">⚠️</span> Basic</td>
+                            <td><span class="success-icon">✅</span> Advanced diff tools</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Getting Started</h2>
+            
+            <h3>1. Dependencies</h3>
+            <p>Already added to your <code>pubspec.yaml</code>:</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>dev_dependencies:
+  golden_toolkit: ^0.15.0</pre>
+            </div>
+
+            <h3>2. Test Configuration</h3>
+            <p>Configuration file: <code>test/flutter_test_config.dart</code></p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>import 'dart:async';
+import 'package:golden_toolkit/golden_toolkit.dart';
+
+Future&lt;void&gt; testExecutable(FutureOr&lt;void&gt; Function() testMain) async {
+  return GoldenToolkit.runWithConfiguration(
+    () async {
+      await loadAppFonts();
+      await testMain();
+    },
+    config: GoldenToolkitConfiguration(
+      skipGoldenAssertion: () => false,
+      enableRealShadows: true,
+      defaultDevices: const [Device.phone],
+    ),
+  );
+}</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📝 Writing Golden Tests</h2>
+            
+            <h3>Basic Single-Device Test</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>testGoldens('Counter App - Initial State', (tester) async {
+  await tester.pumpWidgetBuilder(
+    const MyApp(),
+    surfaceSize: const Size(400, 800),
+  );
+
+  await screenMatchesGolden(tester, 'counter_app_initial');
+});</pre>
+            </div>
+
+            <h3>Testing User Interactions</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>testGoldens('Counter App - After Increment', (tester) async {
+  await tester.pumpWidgetBuilder(const MyApp());
+
+  // Simulate user interaction
+  await tester.tap(find.byTooltip('Increment'));
+  await tester.pumpAndSettle();
+
+  await screenMatchesGolden(tester, 'counter_app_incremented');
+});</pre>
+            </div>
+
+            <h3>Multi-Device Test</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>testGoldens('Counter App - Multiple Devices', (tester) async {
+  final builder = DeviceBuilder()
+    ..overrideDevicesForAllScenarios(
+      devices: [
+        Device.phone,
+        Device.iphone11,
+        Device.tabletPortrait,
+      ],
+    )
+    ..addScenario(
+      widget: const MyApp(),
+      name: 'counter_initial',
+    );
+
+  await tester.pumpDeviceBuilder(builder);
+  await screenMatchesGolden(tester, 'counter_app_devices');
+});</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Available Commands</h2>
+            
+            <div class="command-list">
+                <h4>Script Commands</h4>
+                <div class="command-item">
+                    <code>./scripts/golden-test.sh run</code>
+                    <p>Run golden tests</p>
+                </div>
+                <div class="command-item">
+                    <code>./scripts/golden-test.sh update</code>
+                    <p>Generate/update golden files</p>
+                </div>
+                <div class="command-item">
+                    <code>./scripts/golden-test.sh status</code>
+                    <p>Check golden test status</p>
+                </div>
+                <div class="command-item">
+                    <code>./scripts/golden-test.sh clean</code>
+                    <p>Clean golden files</p>
+                </div>
+            </div>
+
+            <div class="command-list">
+                <h4>Direct Flutter Commands</h4>
+                <div class="command-item">
+                    <code>flutter test test/golden_test.dart</code>
+                    <p>Run golden tests</p>
+                </div>
+                <div class="command-item">
+                    <code>flutter test test/golden_test.dart --update-goldens</code>
+                    <p>Update golden files</p>
+                </div>
+                <div class="command-item">
+                    <code>flutter test test/golden_test.dart --verbose</code>
+                    <p>Run with verbose output</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Available Devices</h2>
+            <p>golden_toolkit provides predefined devices:</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>📱 Phones</h4>
+                    <ul>
+                        <li><code>Device.phone</code> - Generic phone</li>
+                        <li><code>Device.iphone11</code> - iPhone 11</li>
+                        <li><code>Device.smallPhone</code> - Small phone</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>📱 Tablets</h4>
+                    <ul>
+                        <li><code>Device.tabletPortrait</code> - Tablet portrait</li>
+                        <li><code>Device.tabletLandscape</code> - Tablet landscape</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🖥️ Desktop</h4>
+                    <ul>
+                        <li><code>Device.desktop</code> - Desktop size</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>⚙️ Custom Device</h4>
+                    <div class="code-block">
+                        <pre>Device(
+  name: 'custom',
+  size: Size(390, 844),
+  devicePixelRatio: 3.0,
+)</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎨 Best Practices</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4><span class="success-icon">✅</span> Test Multiple States</h4>
+                    <ul>
+                        <li>Initial/empty states</li>
+                        <li>Loading states</li>
+                        <li>Success states with data</li>
+                        <li>Error states</li>
+                        <li>Edge cases (long text, etc.)</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4><span class="success-icon">✅</span> Use Descriptive Names</h4>
+                    <div class="code-block">
+                        <pre>// ❌ Bad
+screenMatchesGolden(tester, 'test1');
+
+// ✅ Good
+screenMatchesGolden(tester, 
+  'login_form_validation_error');</pre>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <h4><span class="success-icon">✅</span> Organize by Feature</h4>
+                    <div class="code-block">
+                        <pre>group('Counter App Golden Tests', () {
+  testGoldens('initial state', ...);
+  testGoldens('after increment', ...);
+  testGoldens('error state', ...);
+});</pre>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <h4><span class="success-icon">✅</span> Test Multiple Screen Sizes</h4>
+                    <div class="code-block">
+                        <pre>devices: [
+  Device.phone,        // 375x812
+  Device.tabletPortrait, // 768x1024
+  Device.desktop,      // 1366x768
+]</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Debugging Failed Tests</h2>
+            
+            <h3>1. Visual Diff Tools</h3>
+            <p>When tests fail, golden_toolkit generates helpful diff images:</p>
+            <ul>
+                <li><code>failure_*.png</code> - Shows differences highlighted</li>
+            </ul>
+
+            <h3>2. Common Failure Causes</h3>
+            <ul>
+                <li><strong>Font loading issues</strong>: Ensure <code>loadAppFonts()</code> is called</li>
+                <li><strong>Platform differences</strong>: Use consistent test environment</li>
+                <li><strong>Timing issues</strong>: Use <code>pumpAndSettle()</code> for animations</li>
+                <li><strong>Size differences</strong>: Specify explicit <code>surfaceSize</code></li>
+            </ul>
+
+            <h3>3. Updating Golden Files</h3>
+            <div class="command-list">
+                <div class="command-item">
+                    <code>./scripts/golden-test.sh update</code>
+                    <p>Update all golden files</p>
+                </div>
+                <div class="command-item">
+                    <code>flutter test test/golden_test.dart --update-goldens --plain-name "specific test name"</code>
+                    <p>Update specific test</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📁 File Structure</h2>
+            <div class="code-block">
+                <pre>test/
+├── flutter_test_config.dart    # Global test configuration
+├── golden_test.dart            # Golden test definitions
+└── goldens/                    # Generated golden images
+    ├── counter_app_initial.png
+    ├── counter_app_incremented.png
+    └── counter_app_devices.png</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Next Steps</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>1. Add More Scenarios</h4>
+                    <p>Expand <code>golden_test.dart</code> with more test cases</p>
+                </div>
+                <div class="feature-card">
+                    <h4>2. Test Different Themes</h4>
+                    <p>Test light/dark mode variations</p>
+                </div>
+                <div class="feature-card">
+                    <h4>3. Test Error States</h4>
+                    <p>Add loading and error state testing</p>
+                </div>
+                <div class="feature-card">
+                    <h4>4. CI/CD Integration</h4>
+                    <p>Integrate with your CI/CD pipeline</p>
+                </div>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">🏠 Back to Documentation Hub</a>
+    </div>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const text = codeBlock.textContent || codeBlock.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#4CAF50';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#0175C2';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                button.textContent = 'Failed to copy';
+                button.style.background = '#F44336';
+                
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.style.background = '#0175C2';
+                }, 2000);
+            });
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
