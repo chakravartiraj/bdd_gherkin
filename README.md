@@ -57,21 +57,21 @@ This project includes a **powerful script-based development environment**:
 
 | Resource | Description | Best For |
 |----------|-------------|----------|
-| **[📖 Testing Learning Center](docs/test-README.html)** | Complete testing guide with 7+ week curriculum | Beginners to Advanced |
-| **[📊 Coverage Documentation](docs/coverage-README.html)** | Master test coverage analysis | Intermediate+ |
-| **[🔍 Analysis Documentation](docs/analyze-README.html)** | Code quality and static analysis | All levels |
+| **[📖 Testing Learning Center](https://chakravartiraj.github.io/bdd_gherkin/test-README.html)** | Complete testing guide with 7+ week curriculum | Beginners to Advanced |
+| **[📊 Coverage Documentation](https://chakravartiraj.github.io/bdd_gherkin/coverage-README.html)** | Master test coverage analysis | Intermediate+ |
+| **[🔍 Analysis Documentation](https://chakravartiraj.github.io/bdd_gherkin/analyze-README.html)** | Code quality and static analysis | All levels |
 
 ### 🛠️ Quick References
 
-- **[⚡ Test Quick Reference](docs/test-quick-reference.html)** - Essential testing commands
-- **[📋 Coverage Quick Reference](docs/coverage-quick-reference.html)** - Coverage analysis commands  
-- **[🔧 Analysis Quick Reference](docs/analyze-quick-reference.html)** - Code analysis commands
+- **[⚡ Test Quick Reference](https://chakravartiraj.github.io/bdd_gherkin/test-quick-reference.html)** - Essential testing commands
+- **[📋 Coverage Quick Reference](https://chakravartiraj.github.io/bdd_gherkin/coverage-quick-reference.html)** - Coverage analysis commands  
+- **[🔧 Analysis Quick Reference](https://chakravartiraj.github.io/bdd_gherkin/analyze-quick-reference.html)** - Code analysis commands
 
 ### 🏋️ Hands-On Practice
 
-- **[🧪 Testing Exercises](docs/hands-on-test-exercise.html)** - 7 practical testing exercises
-- **[📈 Coverage Exercises](docs/hands-on-coverage-exercise.html)** - Coverage analysis practice
-- **[🔍 Analysis Exercises](docs/hands-on-analyze-exercise.html)** - Code quality exercises
+- **[🧪 Testing Exercises](https://chakravartiraj.github.io/bdd_gherkin/hands-on-test-exercise.html)** - 7 practical testing exercises
+- **[📈 Coverage Exercises](https://chakravartiraj.github.io/bdd_gherkin/hands-on-coverage-exercise.html)** - Coverage analysis practice
+- **[🔍 Analysis Exercises](https://chakravartiraj.github.io/bdd_gherkin/hands-on-analyze-exercise.html)** - Code quality exercises
 
 ## 🧪 BDD with Gherkin
 
@@ -212,17 +212,17 @@ flutter test --coverage
 ## 🎯 Getting Started - Learning Path
 
 ### Week 1-2: Foundation
-1. 📖 Read [Testing Walkthrough](docs/flutter-test-walkthrough.html)
+1. 📖 Read [Testing Walkthrough](https://chakravartiraj.github.io/bdd_gherkin/flutter-test-walkthrough.html)
 2. 🏋️ Complete Testing Exercises 1-3
 3. 🎮 Practice with development scripts
 
 ### Week 3-4: Practice  
 1. 🏋️ Complete Testing Exercises 4-7
-2. 📊 Learn [Coverage Analysis](docs/coverage-README.html)
+2. 📊 Learn [Coverage Analysis](https://chakravartiraj.github.io/bdd_gherkin/coverage-README.html)
 3. ✍️ Write tests for your own projects
 
 ### Week 5-6: Quality
-1. 🔍 Master [Code Analysis](docs/analyze-README.html)
+1. 🔍 Master [Code Analysis](https://chakravartiraj.github.io/bdd_gherkin/analyze-README.html)
 2. 🎯 Implement coverage goals
 3. 📈 Practice test-driven development
 
@@ -268,7 +268,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **📖 Documentation**: [Full Documentation Hub](docs/index.html)
+- **📖 Documentation**: [Full Documentation Hub](https://chakravartiraj.github.io/bdd_gherkin/)
 - **🐛 Issues**: [GitHub Issues](https://github.com/chakravartiraj/bdd_gherkin/issues)
 - **💬 Discussions**: [GitHub Discussions](https://github.com/chakravartiraj/bdd_gherkin/discussions)
 
