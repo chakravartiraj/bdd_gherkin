@@ -58,12 +58,14 @@ This project includes a **powerful script-based development environment**:
 | Resource | Description | Best For |
 |----------|-------------|----------|
 | **[📖 Testing Learning Center](https://chakravartiraj.github.io/bdd_gherkin/test-README.html)** | Complete testing guide with 7+ week curriculum | Beginners to Advanced |
+| **[🎯 Golden Testing Guide](https://chakravartiraj.github.io/bdd_gherkin/flutter-golden-walkthrough.html)** | Visual regression testing with golden_toolkit | Intermediate+ |
 | **[📊 Coverage Documentation](https://chakravartiraj.github.io/bdd_gherkin/coverage-README.html)** | Master test coverage analysis | Intermediate+ |
 | **[🔍 Analysis Documentation](https://chakravartiraj.github.io/bdd_gherkin/analyze-README.html)** | Code quality and static analysis | All levels |
 
 ### 🛠️ Quick References
 
 - **[⚡ Test Quick Reference](https://chakravartiraj.github.io/bdd_gherkin/test-quick-reference.html)** - Essential testing commands
+- **[🎯 Golden Quick Reference](https://chakravartiraj.github.io/bdd_gherkin/golden-quick-reference.html)** - Golden testing commands
 - **[📋 Coverage Quick Reference](https://chakravartiraj.github.io/bdd_gherkin/coverage-quick-reference.html)** - Coverage analysis commands  
 - **[🔧 Analysis Quick Reference](https://chakravartiraj.github.io/bdd_gherkin/analyze-quick-reference.html)** - Code analysis commands
 
@@ -219,7 +221,8 @@ flutter test --coverage
 ### Week 3-4: Practice  
 1. 🏋️ Complete Testing Exercises 4-7
 2. 📊 Learn [Coverage Analysis](https://chakravartiraj.github.io/bdd_gherkin/coverage-README.html)
-3. ✍️ Write tests for your own projects
+3. 🎯 Master [Golden Testing](https://chakravartiraj.github.io/bdd_gherkin/flutter-golden-walkthrough.html)
+4. ✍️ Write tests for your own projects
 
 ### Week 5-6: Quality
 1. 🔍 Master [Code Analysis](https://chakravartiraj.github.io/bdd_gherkin/analyze-README.html)
